@@ -13,11 +13,11 @@ namespace Grimorio.DAL.Repositorios
         {
             _dbContext = dbContext;
         }
-        public async Task<TModel> Obtener(Expression<Func<TModel, bool>> filtro)
+        public async Task<TModel?> Obtener(Expression<Func<TModel, bool>> filtro)
         {
             try
             {
-                TModel modelo = await _dbContext.Set<TModel>().FirstOrDefaultAsync(filtro);
+                TModel? modelo = await _dbContext.Set<TModel>().FirstOrDefaultAsync(filtro);
                 return modelo;
             }
             catch
