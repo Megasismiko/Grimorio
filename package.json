@@ -1,0 +1,9 @@
+{
+  "name": "grimorio",
+  "version": "1.0.0",
+  "description": "**Grimorio** es una aplicación web para la gestión y venta de **cartas Magic: The Gathering**, incluyendo productos sueltos, sets especiales y expansiones.   El sistema está desarrollado con **ASP.NET Core 8 (API REST)** y un **frontend en Angular 14**, siguiendo una arquitectura **por capas limpia y modular**.",
+  "main": "index.js",
+  "scripts": {  },
+  "author": "",
+  "license": "ISC"
+}

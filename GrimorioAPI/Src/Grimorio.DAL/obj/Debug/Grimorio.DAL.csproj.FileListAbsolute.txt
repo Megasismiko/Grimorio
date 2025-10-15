@@ -1,0 +1,12 @@
+D:\Grimorio\Grimorio\Grimorio.DAL\bin\Debug\Grimorio.DAL.dll
+D:\Grimorio\Grimorio\Grimorio.DAL\bin\Debug\Grimorio.DAL.pdb
+D:\Grimorio\Grimorio\Grimorio.DAL\obj\Debug\Grimorio.DAL.csproj.AssemblyReference.cache
+D:\Grimorio\Grimorio\Grimorio.DAL\obj\Debug\Grimorio.DAL.csproj.CoreCompileInputs.cache
+D:\Grimorio\Grimorio\Grimorio.DAL\obj\Debug\Grimorio.DAL.dll
+D:\Grimorio\Grimorio\Grimorio.DAL\obj\Debug\Grimorio.DAL.pdb
+D:\Grimorio\Grimorio\Src\Grimorio.DAL\bin\Debug\Grimorio.DAL.dll
+D:\Grimorio\Grimorio\Src\Grimorio.DAL\bin\Debug\Grimorio.DAL.pdb
+D:\Grimorio\Grimorio\Src\Grimorio.DAL\obj\Debug\Grimorio.DAL.csproj.AssemblyReference.cache
+D:\Grimorio\Grimorio\Src\Grimorio.DAL\obj\Debug\Grimorio.DAL.csproj.CoreCompileInputs.cache
+D:\Grimorio\Grimorio\Src\Grimorio.DAL\obj\Debug\Grimorio.DAL.dll
+D:\Grimorio\Grimorio\Src\Grimorio.DAL\obj\Debug\Grimorio.DAL.pdb
