@@ -10,4 +10,10 @@
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.6.2" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Grimorio.DTO\Grimorio.DTO.csproj" />
+    <ProjectReference Include="..\Grimorio.IOC\Grimorio.IOC.csproj" />
+    <ProjectReference Include="..\SistemaVenta.BLL\Grimorio.BLL.csproj" />
+  </ItemGroup>
+
 </Project>

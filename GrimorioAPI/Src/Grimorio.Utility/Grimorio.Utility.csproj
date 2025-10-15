@@ -6,4 +6,9 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Grimorio.DTO\Grimorio.DTO.csproj" />
+    <ProjectReference Include="..\Grimorio.Model\Grimorio.Model.csproj" />
+  </ItemGroup>
+
 </Project>
