@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace Grimorio.Model;
+﻿namespace Grimorio.Model;
 
 public partial class Carta
 {
