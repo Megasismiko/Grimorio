@@ -68,7 +68,7 @@ namespace Grimorio.DAL.Repositorios
             }
         }
 
-        public IQueryable<TModel> Consultar(Expression<Func<TModel, bool>>? filtro)
+        public async Task<IQueryable<TModel>> Consultar(Expression<Func<TModel, bool>>? filtro)
         {
             try
             {

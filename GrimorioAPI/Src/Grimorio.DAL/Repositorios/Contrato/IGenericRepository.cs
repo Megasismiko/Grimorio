@@ -8,7 +8,7 @@ namespace Grimorio.DAL.Repositorios.Contrato
         Task<TModel> Crear(TModel model);
         Task<bool> Editar(TModel model);
         Task<bool> Eliminar(TModel model);
-        IQueryable<TModel> Consultar(Expression<Func<TModel, bool>>? filtro);
+        Task<IQueryable<TModel>> Consultar(Expression<Func<TModel, bool>>? filtro = null);
 
     }
 }
