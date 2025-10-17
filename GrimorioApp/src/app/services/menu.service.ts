@@ -5,19 +5,19 @@ import { enviroment } from '../../enviroments/enviroment';
 import { ResponseApi } from '../interfaces/response-api';
 
 @Injectable({
-  providedIn: 'root'
+	providedIn: 'root'
 })
 export class MenuService {
 
-  private url: string = `${enviroment.endpoint}menu/`;
+	private url: string = `${enviroment.endpoint}menu/`;
 
-  constructor(
-    private _http: HttpClient
-  ) {
-  }
+	constructor(
+		private _http: HttpClient
+	) {
+	}
 
-  public Lista(data: number): Observable<ResponseApi> {
-    return this._http.get<ResponseApi>(`${this.url}lista?idUsuario=${data}`);
-  }
+	public Lista(data: number): Observable<ResponseApi> {
+		return this._http.get<ResponseApi>(`${this.url}lista?idUsuario=${data}`);
+	}
 
 }

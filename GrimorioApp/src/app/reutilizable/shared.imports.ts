@@ -23,6 +23,9 @@ import { MomentDateModule } from '@angular/material-moment-adapter';
 import { MatDividerModule } from '@angular/material/divider';
 import { CommonModule } from '@angular/common';
 import { MatSort, MatSortModule } from '@angular/material/sort';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { MatChipsModule } from '@angular/material/chips';
 
 export const SHARED_IMPORTS = [
 	FormsModule,
@@ -51,5 +54,9 @@ export const SHARED_IMPORTS = [
 	MatDividerModule,
 	CommonModule,
 	MatSortModule,
-	MatSort
+	MatSort,
+	MatFormFieldModule,
+	MatSlideToggleModule,
+	MatChipsModule
+
 ] as const;

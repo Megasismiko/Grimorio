@@ -18,7 +18,7 @@ import { Observable } from 'rxjs';
 	templateUrl: './layout.html',
 	styleUrls: ['./layout.css'],
 })
-export class Layout {
+export class LayoutComponent {
 	menu$!: Observable<Menu[]>;
 
 	constructor(private _menu: MenuService) {

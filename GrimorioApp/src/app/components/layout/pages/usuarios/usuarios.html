@@ -1,0 +1,106 @@
+<mat-card class="page">
+	<!-- Toolbar superior -->
+	<div class="header">
+		<div class="title">
+			<h1>Usuarios</h1>
+			<span class="subtitle">Gestión de cuentas y roles</span>
+		</div>
+
+		<div class="actions">
+			<!-- Filtro -->
+			<mat-form-field appearance="outline" class="filter" subscriptSizing="dynamic">
+				<mat-label>Buscar</mat-label>
+				<input matInput type="text" placeholder="Nombre, correo o rol" (keyup)="AplicarFiltro($event)" />
+				<button mat-icon-button matSuffix aria-label="Limpiar" (click)="LimpiarFiltro()">
+					<mat-icon>close</mat-icon>
+				</button>
+			</mat-form-field>
+
+
+			<!-- Crear -->
+			<button mat-flat-button color="primary" (click)="CrearUsuario()">
+				<mat-icon>person_add</mat-icon>
+				Nuevo
+			</button>
+		</div>
+	</div>
+
+	<!-- Tabla -->
+	<div class="table-wrap">
+		<table mat-table [dataSource]="tablaUsuarios" class="mat-elevation-z1" matSort>
+
+			<!-- Nombre -->
+			<ng-container matColumnDef="nombreCompleto">
+				<th mat-header-cell *matHeaderCellDef mat-sort-header>Nombre</th>
+				<td mat-cell *matCellDef="let u">
+					<div class="cell-main">
+						<mat-icon class="avatar">account_circle</mat-icon>
+						<div class="stack">
+							<span class="name">{{ u.nombreCompleto }}</span>
+							<span class="email">{{ u.correo }}</span>
+						</div>
+					</div>
+				</td>
+			</ng-container>
+
+			<!-- Correo -->
+			<ng-container matColumnDef="correo">
+				<th mat-header-cell *matHeaderCellDef mat-sort-header>Correo</th>
+				<td mat-cell *matCellDef="let u">{{ u.correo }}</td>
+			</ng-container>
+
+			<!-- Rol -->
+			<ng-container matColumnDef="rolDescripcion">
+				<th mat-header-cell *matHeaderCellDef mat-sort-header>Rol</th>
+				<td mat-cell *matCellDef="let u">
+					<mat-chip-set class="chipset">
+						<mat-chip appearance="outlined">{{ u.rolDescripcion }}</mat-chip>
+					</mat-chip-set>
+				</td>
+			</ng-container>
+
+			<!-- Estado -->
+			<ng-container matColumnDef="estado">
+				<th mat-header-cell *matHeaderCellDef>Estado</th>
+				<td mat-cell *matCellDef="let u">
+					<mat-chip-listbox>
+						<mat-chip-option [selected]="u.esActivo" disabled>
+							{{ u.esActivo ? 'Activo' : 'Inactivo' }}
+						</mat-chip-option>
+					</mat-chip-listbox>
+				</td>
+			</ng-container>
+
+			<!-- Acciones -->
+			<ng-container matColumnDef="acciones">
+				<th mat-header-cell *matHeaderCellDef class="col-acciones">Acciones</th>
+				<td mat-cell *matCellDef="let u" class="col-acciones">
+					<button mat-icon-button matTooltip="Editar" (click)="EditarUsuario(u)">
+						<mat-icon>edit</mat-icon>
+					</button>
+					<button mat-icon-button color="warn" matTooltip="Eliminar" (click)="EliminarUsuario(u)">
+						<mat-icon>delete</mat-icon>
+					</button>
+				</td>
+			</ng-container>
+
+			<!-- Header / Rows -->
+			<tr mat-header-row *matHeaderRowDef="columnas; sticky: true"></tr>
+			<tr mat-row *matRowDef="let row; columns: columnas;"></tr>
+
+			<!-- Estado vacío -->
+			<tr class="empty" *ngIf="tablaUsuarios.data?.length === 0">
+				<td [attr.colspan]="columnas.length">
+					<div class="empty-state">
+						<mat-icon>group_off</mat-icon>
+						<p>No hay usuarios para mostrar</p>
+					</div>
+				</td>
+			</tr>
+		</table>
+	</div>
+
+	<!-- Paginador -->
+	<mat-paginator [pageSize]="10" [pageSizeOptions]="[5, 10, 25, 50]" showFirstLastButtons>
+	</mat-paginator>
+</mat-card>

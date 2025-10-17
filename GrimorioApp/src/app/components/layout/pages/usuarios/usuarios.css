@@ -1,0 +1,116 @@
+.page {
+  padding: 16px;
+}
+
+.header {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+}
+
+.title h2 {
+  margin: 0;
+  font-weight: 600;
+}
+
+.subtitle {
+  display: block;
+  font-size: 12px;
+  color: rgba(0,0,0,0.6);
+  margin-top: 2px;
+}
+
+.actions {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.filter {
+  min-width: 260px;
+  width: 340px;
+}
+
+.table-wrap {
+  overflow: auto;
+  border-radius: 12px;
+}
+
+/* Cells bonitas */
+.cell-main {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.avatar {
+  opacity: 0.7;
+}
+
+.stack {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.2;
+}
+
+.name {
+  font-weight: 600;
+}
+
+.email {
+  font-size: 12px;
+  color: rgba(0,0,0,0.6);
+}
+
+/* Acciones alineadas a la derecha */
+.col-acciones {
+  text-align: right;
+  width: 120px;
+}
+
+/* Chips */
+.chipset {
+  --mdc-chip-container-shape-radius: 10px;
+}
+
+/* Cabecera sticky con sombra ligera */
+table {
+  width: 100%;
+  border-spacing: 0;
+}
+
+.mat-mdc-header-row {
+  background: #fafafa;
+}
+
+.mat-mdc-table-sticky {
+  box-shadow: 0 2px 6px rgba(0,0,0,0.06);
+}
+
+/* Estado vacío */
+.empty td {
+  padding: 24px 8px;
+}
+
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  color: rgba(0,0,0,0.6);
+}
+
+.empty-state mat-icon {
+  font-size: 40px;
+  height: 40px;
+  width: 40px;
+  opacity: 0.6;
+}
+
+@media (max-width: 720px) {
+  .filter { width: 100%; min-width: 0; }
+}

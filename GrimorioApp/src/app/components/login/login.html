@@ -1,1 +1,36 @@
-<p>login works!</p>
+<div class="login-container">
+	<mat-card class="login-card">
+		<mat-card-header>
+			<h2>Iniciar sesión</h2>
+		</mat-card-header>
+
+		<!-- 👇 Progress bar visible durante la carga -->
+		<mat-progress-bar *ngIf="loading" mode="indeterminate" color="primary"></mat-progress-bar>
+
+		<mat-card-content>
+			<form [formGroup]="form" (ngSubmit)="onSubmit()">
+				<mat-form-field appearance="outline" class="full-width">
+					<mat-label>Email</mat-label>
+					<input matInput placeholder="usuario@correo.com" formControlName="email" type="email" />
+					<mat-icon matSuffix>email</mat-icon>
+					<mat-error *ngIf="form.get('email')?.hasError('required')">El email es obligatorio</mat-error>
+					<mat-error *ngIf="form.get('email')?.hasError('email')">Formato de email inválido</mat-error>
+				</mat-form-field>
+
+				<mat-form-field appearance="outline" class="full-width">
+					<mat-label>Contraseña</mat-label>
+					<input matInput [type]="hide ? 'password' : 'text'" formControlName="password" />
+					<button mat-icon-button matSuffix type="button" (click)="hide = !hide" [disabled]="loading">
+						<mat-icon>{{ hide ? 'visibility_off' : 'visibility' }}</mat-icon>
+					</button>
+					<mat-error *ngIf="form.get('password')?.hasError('required')">La contraseña es
+						obligatoria</mat-error>
+				</mat-form-field>
+
+				<button mat-flat-button color="primary" class="full-width" [disabled]="form.invalid || loading">
+					{{ loading ? 'Procesando...' : 'Iniciar sesión' }}
+				</button>
+			</form>
+		</mat-card-content>
+	</mat-card>
+</div>

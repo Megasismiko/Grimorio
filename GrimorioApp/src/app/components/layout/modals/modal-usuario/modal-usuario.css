@@ -1,0 +1,33 @@
+.content {
+  padding-top: 8px;
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: 12px;
+}
+
+.full {
+  grid-column: span 12;
+}
+
+.half {
+  grid-column: span 6;
+}
+
+.toggle {
+  display: flex;
+  align-items: center;
+  padding-top: 6px;
+}
+
+@media (max-width: 600px) {
+  .half {
+    grid-column: span 12;
+  }
+}
+
+::ng-deep .mat-mdc-dialog-content {
+  padding-top: 1em !important;
+}

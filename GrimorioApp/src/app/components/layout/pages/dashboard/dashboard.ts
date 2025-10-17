@@ -13,7 +13,7 @@ import { MatTableDataSource } from '@angular/material/table';
 	templateUrl: './dashboard.html',
 	styleUrl: './dashboard.css'
 })
-export class Dashboard implements OnInit, AfterViewInit {
+export class DashboardComponent implements OnInit, AfterViewInit {
 	// 1) Define primero el resumen (ya con datos)
 	resumen: Resumen = {
 		totalIngresos: '5369,66',

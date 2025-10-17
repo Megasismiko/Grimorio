@@ -7,35 +7,37 @@ import { Login } from '../interfaces/login';
 import { Usuario } from '../interfaces/usuario';
 
 @Injectable({
-  providedIn: 'root'
+	providedIn: 'root'
 })
 export class UsuarioService {
 
-  private url: string = `${enviroment.endpoint}usuario/`;
+	private url: string = `${enviroment.endpoint}usuario/`;
 
-  constructor(
-    private _http: HttpClient
-  ) {
-  }
+	constructor(
+		private _http: HttpClient
+	) {
+	}
 
-  public Login(data: Login): Observable<ResponseApi> {
-    return this._http.post<ResponseApi>(`${this.url}login`, data);
-  }
+	public Login(data: Login): Observable<ResponseApi> {
+		return this._http.post<ResponseApi>(`${this.url}login`, data);
+	}
 
-  public Lista(): Observable<ResponseApi> {
-    return this._http.get<ResponseApi>(`${this.url}lista`);
-  }
+	public Lista(): Observable<ResponseApi> {
+		return this._http.get<ResponseApi>(`${this.url}lista`);
+	}
 
-  public Crear(data: Usuario): Observable<ResponseApi> {
-    return this._http.post<ResponseApi>(`${this.url}crear`, data);
-  }
+	public Crear(data: Usuario): Observable<ResponseApi> {
+		console.log(data);
+		debugger;
+		return this._http.post<ResponseApi>(`${this.url}crear`, data);
+	}
 
-  public Editar(data: Usuario): Observable<ResponseApi> {
-    return this._http.put<ResponseApi>(`${this.url}editar`, data);
-  }
+	public Editar(data: Usuario): Observable<ResponseApi> {
+		return this._http.put<ResponseApi>(`${this.url}editar`, data);
+	}
 
-  public Eliminar(data: number): Observable<ResponseApi> {
-    return this._http.delete<ResponseApi>(`${this.url}eliminar/${data}`);
-  }
+	public Eliminar(data: number): Observable<ResponseApi> {
+		return this._http.delete<ResponseApi>(`${this.url}eliminar/${data}`);
+	}
 
 }

@@ -1,0 +1,55 @@
+<h2 mat-dialog-title>{{ titulo }} usuario</h2>
+
+<mat-dialog-content class="content">
+	<form [formGroup]="form" (ngSubmit)="Guardar()" autocomplete="off" class="form-grid">
+
+		<!-- Nombre completo -->
+		<mat-form-field appearance="outline" class="full">
+			<mat-label>Nombre completo</mat-label>
+			<input matInput formControlName="nombreCompleto" placeholder="Nombre y apellidos" />
+			<mat-error *ngIf="form.get('nombreCompleto')?.hasError('required')">
+				El nombre es obligatorio
+			</mat-error>
+		</mat-form-field>
+
+		<!-- Correo -->
+		<mat-form-field appearance="outline" class="full">
+			<mat-label>Correo</mat-label>
+			<input matInput type="email" formControlName="correo" placeholder="usuario@correo.com"
+				autocomplete="email" />
+			<mat-icon matSuffix>email</mat-icon>
+			<mat-error *ngIf="form.get('correo')?.hasError('required')">El correo es obligatorio</mat-error>
+			<mat-error *ngIf="form.get('correo')?.hasError('email')">Formato de correo inválido</mat-error>
+		</mat-form-field>
+
+		<!-- Rol -->
+		<mat-form-field appearance="outline" class="half">
+			<mat-label>Rol</mat-label>
+			<mat-select formControlName="idRol" placeholder="Selecciona un rol">
+				<mat-option *ngFor="let r of roles" [value]="r.idRol">{{ r.nombre }}</mat-option>
+			</mat-select>
+			<mat-error *ngIf="form.get('idRol')?.hasError('required')">El rol es obligatorio</mat-error>
+		</mat-form-field>
+
+		<!-- Estado -->
+		<div class="half toggle">
+			<mat-slide-toggle color="primary" formControlName="esActivo">
+				Activo
+			</mat-slide-toggle>
+		</div>
+
+		<!-- Clave -->
+		<mat-form-field appearance="outline" class="full">
+			<mat-label>Contraseña</mat-label>
+			<input matInput type="password" formControlName="clave" autocomplete="new-password"
+				placeholder="********" />
+			<mat-error *ngIf="form.get('clave')?.hasError('required')">La contraseña es obligatoria</mat-error>
+		</mat-form-field>
+
+	</form>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+	<button mat-stroked-button mat-dialog-close>Cancelar</button>
+	<button mat-flat-button color="primary" [disabled]="form.invalid" (click)="Guardar()">Guardar</button>
+</mat-dialog-actions>
