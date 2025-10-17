@@ -1,84 +1,8 @@
 /* You can add global styles to this file, and also import other style files */
 
-html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 
-/* Pon esto DESPUÉS de importar azure-blue.css */
-/* Bridge global de tokens de componente -> tokens del sistema (M3) */
-/* ===== Bridge global M3 (system tokens) -> tokens de componente ===== */
-/* Toolbar */
-:root {
-  --mat-toolbar-container-background-color: var(--mat-sys-primary);
-  --mat-toolbar-container-text-color: var(--mat-sys-on-primary);
 
-  /* Botones filled/raised (mdc filled) */
-  --mdc-filled-button-container-color: var(--mat-sys-primary);
-  --mdc-filled-button-label-text-color: var(--mat-sys-on-primary);
-
-  /* Botones outlined */
-  --mdc-outlined-button-outline-color: var(--mat-sys-outline);
-  --mdc-outlined-button-label-text-color: var(--mat-sys-primary);
-
-  /* Botones text */
-  --mdc-text-button-label-text-color: var(--mat-sys-primary);
-
-  /* Icon buttons */
-  --mdc-icon-button-icon-color: var(--mat-sys-on-surface);
-  --mdc-icon-button-disabled-icon-color: color-mix(in srgb, var(--mat-sys-on-surface) 38%, transparent);
-
-  /* Chips */
-  --mdc-assist-chip-label-text-color: var(--mat-sys-on-surface);
-  --mdc-filter-chip-container-color: var(--mat-sys-surface);
-  --mdc-filter-chip-label-text-color: var(--mat-sys-on-surface);
-
-  /* Fields (filled) */
-  --mdc-filled-text-field-container-color: var(--mat-sys-surface);
-  --mdc-filled-text-field-caret-color: var(--mat-sys-primary);
-  --mdc-filled-text-field-focus-active-indicator-color: var(--mat-sys-primary);
-  --mdc-filled-text-field-label-text-color: var(--mat-sys-on-surface);
-
-  /* Fields (outlined) */
-  --mdc-outlined-text-field-outline-color: var(--mat-sys-outline);
-  --mdc-outlined-text-field-focus-outline-color: var(--mat-sys-primary);
-  --mdc-outlined-text-field-caret-color: var(--mat-sys-primary);
-
-  /* Checkbox / Radio / Slide toggle */
-  --mdc-checkbox-selected-icon-color: var(--mat-sys-on-primary);
-  --mdc-checkbox-selected-checkmark-color: var(--mat-sys-on-primary);
-  --mdc-checkbox-selected-focus-state-layer-color: var(--mat-sys-primary);
-  --mdc-radio-selected-icon-color: var(--mat-sys-primary);
-  --mdc-switch-selected-handle-color: var(--mat-sys-on-primary);
-  --mdc-switch-selected-track-color: var(--mat-sys-primary);
-
-  /* Progress */
-  --mdc-circular-progress-active-indicator-color: var(--mat-sys-primary);
-  --mdc-linear-progress-active-indicator-color: var(--mat-sys-primary);
-
-  /* Tabs */
-  --mdc-tab-indicator-active-indicator-color: var(--mat-sys-primary);
-  --mdc-tab-label-text-color: var(--mat-sys-on-surface);
-
-  /* Paginator */
-  --mat-paginator-container-background-color: var(--mat-sys-surface);
-  --mat-paginator-container-text-color: var(--mat-sys-on-surface);
-
-  /* Table / header */
-  --mat-table-header-headline-color: var(--mat-sys-on-surface);
-  --mat-table-row-item-label-text-color: var(--mat-sys-on-surface);
-
-  /* Card */
-  --mat-card-subtitle-text-color: color-mix(in srgb, var(--mat-sys-on-surface) 70%, transparent);
-}
-
-/* Contexto: toolbar primary -> contenido en blanco */
-.mat-toolbar.mat-primary {
-  --mdc-icon-button-icon-color: var(--mat-sys-on-primary);
-  color: var(--mat-sys-on-primary);
-}
-.mat-toolbar.mat-primary .mat-icon { color: var(--mat-sys-on-primary); }
-
-/* Menú / lista suelen heredar bien, pero por si acaso: */
-.mat-mdc-menu-panel, .mat-mdc-select-panel, .mat-mdc-autocomplete-panel {
-  color: var(--mat-sys-on-surface);
-  background: var(--mat-sys-surface);
-}
+html, body { height: 100%; margin: 0; }
+body {  font-family: Roboto, "Helvetica Neue", sans-serif; }
+app-root { min-height: 100vh; display: flex; flex-direction: column; }
+mat-sidenav-container { flex: 1 1 auto; }

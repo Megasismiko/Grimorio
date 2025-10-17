@@ -9,20 +9,20 @@ import { Reporte } from './components/layout/pages/reporte/reporte';
 import { Login } from './components/login/login';
 
 export const routes: Routes = [
-  { path: '', redirectTo: 'login', pathMatch: 'full' },
-  { path: 'login', component: Login },
-  {
-    path: 'pages',
-    component: Layout,
-    children: [
-      { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
-      { path: 'dashboard', component: Dashboard },
-      { path: 'usuarios', component: Usuario },
-      { path: 'cartas', component: Carta },
-      { path: 'venta', component: Venta },
-      { path: 'historial', component: Historial },
-      { path: 'reporte', component: Reporte }
-    ]
-  },
-  { path: '**', redirectTo: 'login' }
+	{ path: '', redirectTo: 'login', pathMatch: 'full' },
+	{ path: 'login', component: Login },
+	{
+		path: 'pages',
+		component: Layout,
+		children: [
+			{ path: '', redirectTo: 'dashboard', pathMatch: 'full' },
+			{ path: 'dashboard', component: Dashboard },
+			{ path: 'usuarios', component: Usuario },
+			{ path: 'cartas', component: Carta },
+			{ path: 'ventas', component: Venta },
+			{ path: 'historial', component: Historial },
+			{ path: 'reporte', component: Reporte }
+		]
+	},
+	{ path: '**', redirectTo: 'login' }
 ];

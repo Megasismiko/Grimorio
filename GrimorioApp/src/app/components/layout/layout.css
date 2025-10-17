@@ -1,4 +1,6 @@
-.mat-toolbar.mat-primary {
-  --mat-toolbar-container-background-color: var(--mat-sys-primary);
-  --mat-toolbar-container-text-color: var(--mat-sys-on-primary);
+:host { display: flex; flex-direction: column; min-height: 100vh; }
+mat-sidenav-container { flex: 1 1 auto; }
+.active-link {	
+  background-color: var(--mat-sys-primary-container);
+  color: var(--mat-sys-on-primary-container);
 }

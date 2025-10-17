@@ -20,29 +20,36 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MomentDateModule } from '@angular/material-moment-adapter';
+import { MatDividerModule } from '@angular/material/divider';
+import { CommonModule } from '@angular/common';
+import { MatSort, MatSortModule } from '@angular/material/sort';
 
 export const SHARED_IMPORTS = [
-  FormsModule,
-  ReactiveFormsModule,
-  MatCardModule,
-  MatInputModule,
-  MatSelectModule,
-  MatProgressBarModule,
-  MatProgressSpinnerModule,
-  MatGridListModule,
-  LayoutModule,
-  MatToolbarModule,
-  MatSidenavModule,
-  MatButtonModule,
-  MatIconModule,
-  MatListModule,
-  MatTableModule,
-  MatPaginatorModule,
-  MatDialogModule,
-  MatSnackBarModule,
-  MatTooltipModule,
-  MatAutocompleteModule,
-  MatDatepickerModule,
-  MatNativeDateModule,
-  MomentDateModule
+	FormsModule,
+	ReactiveFormsModule,
+	MatCardModule,
+	MatInputModule,
+	MatSelectModule,
+	MatProgressBarModule,
+	MatProgressSpinnerModule,
+	MatGridListModule,
+	LayoutModule,
+	MatToolbarModule,
+	MatSidenavModule,
+	MatButtonModule,
+	MatIconModule,
+	MatListModule,
+	MatTableModule,
+	MatPaginatorModule,
+	MatDialogModule,
+	MatSnackBarModule,
+	MatTooltipModule,
+	MatAutocompleteModule,
+	MatDatepickerModule,
+	MatNativeDateModule,
+	MomentDateModule,
+	MatDividerModule,
+	CommonModule,
+	MatSortModule,
+	MatSort
 ] as const;

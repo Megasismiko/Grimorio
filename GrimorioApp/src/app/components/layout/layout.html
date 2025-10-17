@@ -1,25 +1,30 @@
 <mat-toolbar color="primary">
-  <mat-toolbar-row>
-    <h1>Grimorio</h1>
-    <button mat-icon-button (click)="sidenav.toggle()">
-      <mat-icon>menu</mat-icon>
-    </button>
-  </mat-toolbar-row>
+	<mat-toolbar-row>
+		<h1>Grimorio</h1>
+		<button mat-icon-button (click)="sidenav.toggle()">
+			<mat-icon style="color: white;">menu</mat-icon>
+		</button>
+	</mat-toolbar-row>
 </mat-toolbar>
 
 <mat-sidenav-container>
-  <mat-sidenav #sidenav opened="false" mode="side" style="width: 200px;">
-    <mat-nav-list>
-      <mat-list-item>
-        <mat-icon mat-list-icon>dashboard</mat-icon>
-        <div mat-line>Dashboard</div>
-      </mat-list-item>
-
-    </mat-nav-list>
-  </mat-sidenav>
-  <mat-sidenav-content>
-    <div style="height: 90%;">
-      <router-outlet></router-outlet>
-    </div>
-  </mat-sidenav-content>
+	<mat-sidenav #sidenav opened="false" mode="side" style="width: 200px;">
+		<mat-nav-list>
+			@if (menu$ | async; as menu) {
+			@for (item of menu; track item.url) {
+				<a mat-list-item [routerLink]="item.url" routerLinkActive="active-link">
+					<mat-icon matListItemIcon>{{ item.icono }}</mat-icon>
+					<div matListItemTitle>{{ item.nombre }}</div>
+				</a>
+				}
+			} @else {
+				<div class="empty">Cargando menú…</div>
+			}
+		</mat-nav-list>
+	</mat-sidenav>
+	<mat-sidenav-content>
+		<div style="height: 90%;">
+			<router-outlet></router-outlet>
+		</div>
+	</mat-sidenav-content>
 </mat-sidenav-container>

@@ -1,1 +1,84 @@
-<p>dashboard works!</p>
+<div class="dashboard-container">
+	<h1 class="title">Resumen general</h1>
+
+	<div class="cards-grid">
+		<mat-card class="stat-card stat--ventas">
+			<mat-icon class="icon">shopping_cart</mat-icon>
+			<div class="info">
+				<div class="label">Total Ventas</div>
+				<div class="value">{{ resumen.totalVentas }}</div>
+				<div class="meta"><span class="dot"></span> últimos 7 días</div>
+			</div>
+		</mat-card>
+
+		<mat-card class="stat-card stat--ingresos">
+			<mat-icon class="icon">attach_money</mat-icon>
+			<div class="info">
+				<div class="label">Total Ingresos</div>
+				<div class="value">{{ resumen.totalIngresos }} €</div>
+				<div class="meta"><span class="dot"></span> acumulado</div>
+			</div>
+		</mat-card>
+
+		<mat-card class="stat-card stat--productos">
+			<mat-icon class="icon">inventory_2</mat-icon>
+			<div class="info">
+				<div class="label">Total Cartas</div>
+				<div class="value">{{ resumen.totalProductos }}</div>
+				<div class="meta subtle"><span class="dot"></span> en stock</div>
+			</div>
+		</mat-card>
+	</div>
+
+	<mat-divider class="divider"></mat-divider>
+
+
+	<mat-card class="table-card" *ngIf="ventasData.data.length > 0">
+		<div class="table-title">
+			<mat-icon>receipt_long</mat-icon>
+			<span>Ventas última semana</span>
+		</div>
+
+		<table mat-table [dataSource]="ventasData" matSort class="ventas-table" [trackBy]="trackById">
+
+			<!-- Columna: ID -->
+			<ng-container matColumnDef="id">
+				<th mat-header-cell *matHeaderCellDef mat-sort-header>#</th>
+				<td mat-cell *matCellDef="let v">
+					<div class="cell-id">
+						<mat-icon>receipt_long</mat-icon>
+						<span>#{{ v.id }}</span>
+					</div>
+				</td>
+				<td mat-footer-cell *matFooterCellDef>Total</td>
+			</ng-container>
+
+			<!-- Columna: Fecha -->
+			<ng-container matColumnDef="fecha">
+				<th mat-header-cell *matHeaderCellDef mat-sort-header>Fecha</th>
+				<td mat-cell *matCellDef="let v">{{ v.fecha | date:'EEE d MMM, HH:mm' }}</td>
+				<td mat-footer-cell *matFooterCellDef>{{ ventasData.data.length }} ventas</td>
+			</ng-container>
+
+			<!-- Columna: Total -->
+			<ng-container matColumnDef="total">
+				<th mat-header-cell *matHeaderCellDef mat-sort-header>Total</th>
+				<td mat-cell *matCellDef="let v">{{ v.total | number:'1.2-2' }} €</td>
+				<td mat-footer-cell *matFooterCellDef>{{ totalSemana | number:'1.2-2' }} €</td>
+			</ng-container>
+
+			<!-- Filas -->
+			<tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+			<tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+			<tr mat-footer-row *matFooterRowDef="displayedColumns"></tr>
+		</table>
+
+		<mat-paginator [pageSizeOptions]="[5,10,25]" [pageSize]="5"></mat-paginator>
+	</mat-card>
+
+	<div *ngIf="ventasData.data.length === 0" class="empty">
+		No hay ventas registradas en la última semana.
+	</div>
+
+
+</div>

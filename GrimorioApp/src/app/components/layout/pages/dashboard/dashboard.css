@@ -1,0 +1,130 @@
+/* Contenedor y títulos */
+.dashboard-container { padding: clamp(16px, 3vw, 24px); display: grid; gap: 1.25rem; }
+.title { margin: 0; font-weight: 600; color: var(--mat-sys-on-surface); }
+
+/* Grid responsiva */
+.cards-grid {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: clamp(12px, 2.5vw, 20px);
+}
+.stat-card { grid-column: span 12; }
+@media (min-width: 640px) { .stat-card { grid-column: span 6; } }
+@media (min-width: 1024px){ .stat-card { grid-column: span 4; } }
+
+/* Card avanzada (glass + borde degradado) */
+/* Card con fondo sólido, efecto flotante y mejor contraste */
+.stat-card {
+  position: relative;
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 14px;
+  padding: clamp(16px, 2.4vw, 20px);
+  border-radius: 16px;
+
+  /* Fondo sólido con leve degradado */
+  background: linear-gradient(
+    145deg,
+    color-mix(in srgb, var(--mat-sys-surface-container) 92%, var(--mat-sys-primary) 6%),
+    color-mix(in srgb, var(--mat-sys-surface-container-high) 95%, var(--mat-sys-primary) 4%)
+  );
+
+  /* Borde suave + sombra */
+  border: 1px solid color-mix(in srgb, var(--mat-sys-outline-variant) 40%, transparent);
+  box-shadow:
+    0 6px 12px rgba(0,0,0,0.08),
+    0 2px 4px rgba(0,0,0,0.06);
+
+  transition: transform 0.25s ease, box-shadow 0.25s ease, background 0.25s ease;
+  backdrop-filter: blur(6px);
+  overflow: hidden;
+  isolation: isolate;
+}
+
+.stat-card:hover {
+  transform: translateY(-3px);
+  box-shadow:
+    0 10px 24px rgba(0,0,0,0.12),
+    0 4px 8px rgba(0,0,0,0.08);
+  background: linear-gradient(
+    145deg,
+    color-mix(in srgb, var(--mat-sys-surface-container-highest) 92%, var(--mat-sys-primary) 8%),
+    color-mix(in srgb, var(--mat-sys-surface-container-high) 95%, var(--mat-sys-primary) 6%)
+  );
+}
+/* Icono cápsula */
+.icon {
+  z-index: 1;
+  display: grid;
+  place-items: center;
+  width: 56px; height: 56px;
+  border-radius: 14px;
+  font-size: 28px;
+  color: var(--mat-sys-primary);
+  background: color-mix(in srgb, var(--mat-sys-primary) 18%, transparent);
+}
+
+/* Texto */
+.info { z-index: 1; display: grid; align-content: center; gap: 6px; }
+.label { font-size: .9rem; color: var(--mat-sys-on-surface-variant); }
+.value {
+  font-size: clamp(1.4rem, 3.2vw, 2rem);
+  font-weight: 700; line-height: 1.1; letter-spacing: .2px;
+  color: var(--mat-sys-on-surface);
+}
+.meta {
+  display: inline-flex; align-items: center; gap: 6px;
+  font-size: .85rem; color: var(--mat-sys-on-surface-variant);
+  margin-top: 2px;
+}
+.meta .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--mat-sys-primary); }
+.meta.subtle .dot { background: var(--mat-sys-tertiary); }
+
+/* Variantes por tipo (tono del icono) */
+.stat--ingresos .icon { color: var(--mat-sys-tertiary); background: color-mix(in srgb, var(--mat-sys-tertiary) 18%, transparent); }
+.stat--productos .icon { color: var(--mat-sys-secondary); background: color-mix(in srgb, var(--mat-sys-secondary) 18%, transparent); }
+
+/* Resto de la vista */
+.subtitle { margin-top: .5rem; font-size: 1.1rem; font-weight: 600; color: var(--mat-sys-on-surface-variant); }
+.divider { margin-top: .75rem; }
+.empty { color: var(--mat-sys-on-surface-variant); font-style: italic; padding: .5rem 0; }
+
+/* Respeta accesibilidad de movimiento */
+@media (prefers-reduced-motion: reduce) {
+  .stat-card { transition: none; }
+  .stat-card:hover { transform: none; }
+}
+
+
+.table-card { padding: 0; overflow: hidden; }
+.table-title {
+  display: flex; align-items: center; gap: 8px;
+  padding: 14px 16px;
+  font-weight: 600; color: var(--mat-sys-on-surface);
+  border-bottom: 1px solid color-mix(in srgb, var(--mat-sys-outline-variant) 35%, transparent);
+  background: color-mix(in srgb, var(--mat-sys-surface-container) 92%, transparent);
+}
+
+.ventas-table { width: 100%; }
+.ventas-table th[mat-header-cell] {
+  font-weight: 600;
+  color: var(--mat-sys-on-surface-variant);
+  background: color-mix(in srgb, var(--mat-sys-surface-container-high) 92%, transparent);
+}
+.ventas-table td[mat-cell], .ventas-table th[mat-header-cell], .ventas-table td[mat-footer-cell] {
+  padding: 12px 16px;
+  border-bottom: 1px solid color-mix(in srgb, var(--mat-sys-outline-variant) 30%, transparent);
+}
+.ventas-table tr.mat-mdc-row:nth-child(even) td[mat-cell] {
+  background: color-mix(in srgb, var(--mat-sys-surface) 97%, transparent);
+}
+.ventas-table tr.mat-mdc-row:hover td[mat-cell] {
+  background: color-mix(in srgb, var(--mat-sys-primary) 6%, transparent);
+}
+
+.cell-id { display: inline-flex; align-items: center; gap: 8px; }
+.cell-id mat-icon { color: var(--mat-sys-primary); }
+
+mat-paginator {
+  border-top: 1px solid color-mix(in srgb, var(--mat-sys-outline-variant) 35%, transparent);
+}
