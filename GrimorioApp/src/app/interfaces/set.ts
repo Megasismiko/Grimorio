@@ -1,3 +1,5 @@
+import { Carta } from "./carta"
+
 export interface Set {
 	idSet: number,
 	nombre: string,
@@ -5,5 +7,7 @@ export interface Set {
 	codigo: string
 	logo: string
 	fechaSalida: string,
-	color: string
+	color: string,
+	cartas?: Carta[]
+	numCartas?: number
 }

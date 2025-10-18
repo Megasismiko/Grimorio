@@ -76,7 +76,7 @@ namespace Grimorio.DAL.DBContext;
             entity.Property(e => e.Tipo)
                 .HasMaxLength(100)
                 .IsUnicode(false);
-            entity.HasOne(d => d.IdSetNavigation).WithMany(p => p.Carta)
+            entity.HasOne(d => d.IdSetNavigation).WithMany(p => p.Cartas)
                 .HasForeignKey(d => d.IdSet)
                 .HasConstraintName("FK__Cartas__IdSet__48CFD27E");
         });

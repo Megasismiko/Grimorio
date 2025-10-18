@@ -17,8 +17,12 @@ export class SetsService {
 	) {
 	}
 
-	public Lista(): Observable<ResponseApi> {
-		return this._http.get<ResponseApi>(`${this.url}lista`);
+	public GetSets(): Observable<ResponseApi> {
+		return this._http.get<ResponseApi>(this.url);
+	}
+
+	public GetSetById(id: number): Observable<ResponseApi> {
+		return this._http.get<ResponseApi>(`${this.url}set/${id}`);
 	}
 
 	public Crear(data: Set): Observable<ResponseApi> {
@@ -61,6 +65,5 @@ export class SetsService {
 		const [, y, mm, dd] = m;
 		return `${dd}/${mm}/${y}`;
 	}
-
 
 }

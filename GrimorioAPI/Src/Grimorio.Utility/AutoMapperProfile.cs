@@ -134,7 +134,7 @@ namespace Grimorio.Utility
                    opt => opt.MapFrom(origen => Convert.ToString(origen.Total.Value, Culture.Current))
                 );
 
-         
+
             #endregion
 
         }

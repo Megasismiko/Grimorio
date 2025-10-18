@@ -16,12 +16,8 @@ export class CartasService {
 	) {
 	}
 
-	public Lista(): Observable<ResponseApi> {
-		return this._http.get<ResponseApi>(`${this.url}lista`);
-	}
-
-	public ListaSet(id: number): Observable<ResponseApi> {
-		return this._http.get<ResponseApi>(`${this.url}lista/set?id=${id}`);
+	public GetCartaById(id: number): Observable<ResponseApi> {
+		return this._http.get<ResponseApi>(`${this.url}carta/${id}`);
 	}
 
 	public Crear(data: Carta): Observable<ResponseApi> {

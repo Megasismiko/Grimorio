@@ -15,35 +15,17 @@ namespace Grimorio.API.Controllers
         {
             _cartaService = cartaService;
         }
+              
 
         [HttpGet]
-        [Route("lista")]
-        public async Task<IActionResult> Lista()
+        [Route("carta/{id:int}")]
+        public async Task<IActionResult> GetCartaById(int id)
         {
-            Response<List<CartaDTO>> res = new();
+            Response<CartaDTO> res = new();
 
             try
             {
-                res.value = await _cartaService.Lista();
-            }
-            catch (Exception ex)
-            {
-                res.status = false;
-                res.msg = ex.Message;
-            }
-
-            return Ok(res);
-        }
-
-        [HttpGet]
-        [Route("lista/set")]
-        public async Task<IActionResult> ListaSet(int id)
-        {
-            Response<List<CartaDTO>> res = new();
-
-            try
-            {
-                res.value = await _cartaService.ListaSet(id);
+                res.value = await _cartaService.GetCartaById(id);
             }
             catch (Exception ex)
             {

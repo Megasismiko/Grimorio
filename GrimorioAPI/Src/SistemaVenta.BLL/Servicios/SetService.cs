@@ -3,6 +3,7 @@ using Grimorio.BLL.Servicios.Contrato;
 using Grimorio.DAL.Repositorios.Contrato;
 using Grimorio.DTO;
 using Grimorio.Model;
+using Microsoft.EntityFrameworkCore;
 
 namespace Grimorio.BLL.Servicios
 {
@@ -17,90 +18,67 @@ namespace Grimorio.BLL.Servicios
             _mapper = mapper;
         }
 
-        public async Task<List<SetDTO>> Lista()
+        public async Task<List<SetDTO>> GetSets()
         {
-            try
-            {
-                var sets = await _setRepository.Consultar();
-                return _mapper.Map<List<SetDTO>>(sets.ToList());
-            }
-            catch
-            {
-                throw;
-            }
+            var query = await _setRepository.Consultar();
+            var sets = await query
+                .Include(s => s.Cartas)
+                .AsNoTracking()
+                .ToListAsync();
+
+            return _mapper.Map<List<SetDTO>>(sets);
+        }
+
+        public async Task<SetDTO?> GetSetById(int id)
+        {
+            var query = await _setRepository.Consultar(s => s.IdSet == id);
+            var set = await query
+                .Include(s => s.Cartas)
+                .AsNoTracking()
+                .FirstOrDefaultAsync();
+
+            return set is null ? null : _mapper.Map<SetDTO>(set);
         }
 
         public async Task<SetDTO> Crear(SetDTO dto)
         {
-            try
-            {
-                var set = await _setRepository.Crear(_mapper.Map<Set>(dto));
+            var entity = _mapper.Map<Set>(dto);
+            var creado = await _setRepository.Crear(entity);
 
-                if (set.IdSet == 0)
-                    throw new TaskCanceledException("No es posible crear el set");
+            if (creado is null || creado.IdSet == 0)
+                throw new TaskCanceledException("No fue posible crear el set.");
 
-                var query = await _setRepository.Consultar(u => u.IdSet == set.IdSet);
-
-                set = query.First();
-
-                return _mapper.Map<SetDTO>(set);
-            }
-            catch
-            {
-                throw;
-            }
+            return _mapper.Map<SetDTO>(creado);
         }
 
         public async Task<bool> Editar(SetDTO dto)
         {
-            try
-            {
-                var set = _mapper.Map<Set>(dto);
-                var setExistente = await _setRepository.Obtener(u => u.IdSet == set.IdSet);
+            var existente = await _setRepository.Obtener(s => s.IdSet == dto.IdSet);
 
-                if (setExistente == null)
-                    throw new TaskCanceledException("La carta no existe");
+            if (existente is null)
+                throw new TaskCanceledException("El set no existe.");
 
-                setExistente.Nombre = set.Nombre;
-                setExistente.Codigo = set.Codigo;
-                setExistente.Logo = set.Logo;
-                setExistente.Color = set.Color;
-                setExistente.FechaSalida = set.FechaSalida;
-                setExistente.EsActivo = set.EsActivo;
+            _mapper.Map(dto, existente);
 
-                bool result = await _setRepository.Editar(setExistente);
+            var result = await _setRepository.Editar(existente);
+            if (!result)
+                throw new TaskCanceledException("Error al editar el set.");
 
-                if (!result)
-                    throw new TaskCanceledException("Error al editar el set");
-
-                return result;
-            }
-            catch
-            {
-                throw;
-            }
+            return true;
         }
 
         public async Task<bool> Eliminar(int id)
         {
-            try
-            {
-                var carta = await _setRepository.Obtener(u => u.IdSet == id);
+            var set = await _setRepository.Obtener(s => s.IdSet == id);
 
-                if (carta == null)
-                    throw new TaskCanceledException("La carta no existe");
+            if (set is null)
+                throw new TaskCanceledException("El set no existe.");
 
-                bool result = await _setRepository.Eliminar(carta);
+            var result = await _setRepository.Eliminar(set);
+            if (!result)
+                throw new TaskCanceledException("Error al eliminar el set.");
 
-                if (!result)
-                    throw new TaskCanceledException("Error al eliminar el ser");
-
-                return result;
-            }
-            catch
-            {
-                throw;
-            }
+            return true;
         }
     }
 }

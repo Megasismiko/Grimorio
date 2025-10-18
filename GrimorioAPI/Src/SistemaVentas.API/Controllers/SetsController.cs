@@ -17,14 +17,14 @@ namespace Grimorio.API.Controllers
         }
 
         [HttpGet]
-        [Route("lista")]
-        public async Task<IActionResult> Lista()
+        [Route("")]
+        public async Task<IActionResult> Sets()
         {
             Response<List<SetDTO>> res = new();
 
             try
             {
-                res.value = await _setService.Lista();
+                res.value = await _setService.GetSets();
             }
             catch (Exception ex)
             {
@@ -35,6 +35,24 @@ namespace Grimorio.API.Controllers
             return Ok(res);
         }
 
+        [HttpGet]
+        [Route("set/{id:int}")]
+        public async Task<IActionResult> GetSetById(int id)
+        {
+            Response<SetDTO> res = new();
+
+            try
+            {
+                res.value = await _setService.GetSetById(id);
+            }
+            catch (Exception ex)
+            {
+                res.status = false;
+                res.msg = ex.Message;
+            }
+
+            return Ok(res);
+        }
         [HttpPost]
         [Route("crear")]
         public async Task<IActionResult> Crear([FromBody] SetDTO set)

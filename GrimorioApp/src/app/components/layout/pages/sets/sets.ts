@@ -59,7 +59,7 @@ export class SetsComponent implements OnInit {
 	}
 
 	private Obtener() {
-		this.setsService.Lista().subscribe({
+		this.setsService.GetSets().subscribe({
 			next: res => {
 				if (res.status) {
 					this.sets = res.value;

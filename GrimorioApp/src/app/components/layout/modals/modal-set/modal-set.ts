@@ -86,7 +86,9 @@ export class ModalSet implements OnInit {
 			codigo: v.codigo,
 			logo: v.logo,
 			fechaSalida: this.onlyDate(v.fechaSalida),
-			color: v.color
+			color: v.color,
+			cartas: [],
+			numCartas: 0
 		};
 
 		const obs = this.set ? this._setsService.Editar(data) : this._setsService.Crear(data);

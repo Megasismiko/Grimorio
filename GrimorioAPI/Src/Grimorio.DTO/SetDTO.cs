@@ -9,5 +9,8 @@
         public string? Logo { get; set; }
         public string? FechaSalida { get; set; }
         public string? Color { get; set; }
+        public List<CartaDTO>? Cartas { get; set; }
+        public int? NumCartas => Cartas?.Count ?? 0;
+
     }
 }
