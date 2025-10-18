@@ -1,0 +1,89 @@
+<mat-card class="page">
+
+	<!-- Toolbar superior -->
+	<div class="header">
+
+		<!-- Título -->
+		<div class="title">
+			<h1>Sets</h1>
+			<br>
+			<span class="subtitle">Colecciones de cartas</span>
+		</div>
+
+		<!-- Acciones -->
+		<div class="actions">
+
+			<!-- Filtro -->
+			<mat-form-field appearance="outline" class="filter" subscriptSizing="dynamic">
+				<mat-label>Buscar</mat-label>
+				<input matInput placeholder="Nombre o código" [formControl]="filterCtrl" />
+				<button mat-icon-button matSuffix aria-label="Limpiar" (click)="filterCtrl.setValue('')">
+					<mat-icon>close</mat-icon>
+				</button>
+			</mat-form-field>
+
+			<!-- Botón crear -->
+			<button mat-flat-button color="primary" (click)="Crear()">
+				<mat-icon>add</mat-icon>
+				Crear Set
+			</button>
+		</div>
+	</div>
+
+
+	<!-- Loading -->
+	<div class="loading" *ngIf="isLoading">
+		<mat-progress-spinner mode="indeterminate" diameter="40"></mat-progress-spinner>
+	</div>
+
+	<!-- Grid de cards (4 por fila desktop, responsive) -->
+	<div class="cards-grid" *ngIf="!isLoading">
+		<mat-card class="set-card" *ngFor="let s of filteredSets(); trackBy: trackById">
+			<img class="set-logo" [src]="s.logo" [alt]="s.nombre" loading="lazy" [style.background-color]="s.color" />
+
+			<mat-card-header>
+				<div mat-card-avatar class="avatar">
+					<span>{{ s.codigo }}</span>
+				</div>
+				<mat-card-title>{{ s.nombre }}</mat-card-title>
+				<mat-card-subtitle>
+					{{ s.fechaSalida.substring(0,10) }}
+				</mat-card-subtitle>
+			</mat-card-header>
+
+			<mat-card-content>
+				<mat-chip-set>
+					<mat-chip [highlighted]="s.esActivo" [color]="s.esActivo ? 'primary' : undefined">
+						{{ s.esActivo ? 'Activo' : 'Inactivo' }}
+					</mat-chip>
+					<mat-chip>Id: {{ s.idSet }}</mat-chip>
+					<mat-chip>Código: {{ s.codigo }}</mat-chip>
+				</mat-chip-set>
+			</mat-card-content>
+
+			<mat-card-actions align="end" class="card-actions">
+
+				<button mat-flat-button class="btn-verde" (click)="Editar(s)">
+					<mat-icon>edit</mat-icon>
+					Editar
+				</button>
+				<button mat-flat-button class="btn-rojo" (click)="Eliminar(s)">
+					<mat-icon>delete</mat-icon>
+					Eliminar
+				</button>
+
+
+				<button mat-flat-button class="btn-azul" [routerLink]="['/pages/set', s.idSet]">
+					<mat-icon>style</mat-icon>
+					Cartas
+				</button>
+			</mat-card-actions>
+		</mat-card>
+	</div>
+
+	<!-- Vacío -->
+	<div class="empty" *ngIf="!isLoading && filteredSets().length === 0">
+		<mat-icon>inventory_2</mat-icon>
+		<p>No hay sets que coincidan con el filtro.</p>
+	</div>
+</mat-card>

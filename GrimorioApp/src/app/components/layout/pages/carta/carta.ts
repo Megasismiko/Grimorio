@@ -2,16 +2,18 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 @Component({
-	selector: 'app-cartas',
+	standalone: true,
+	selector: 'app-carta',
 	imports: [],
-	templateUrl: './cartas.html',
-	styleUrl: './cartas.css'
+	templateUrl: './carta.html',
+	styleUrl: './carta.css'
 })
-export class CartasComponent implements OnInit {
+export class CartaComponent implements OnInit {
 
 	constructor(private route: ActivatedRoute) { }
 
 	ngOnInit() {
 		const idSet = this.route.snapshot.paramMap.get('idSet');
+		const idCarta = this.route.snapshot.paramMap.get('idCarta');
 	}
 }

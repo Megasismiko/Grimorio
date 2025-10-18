@@ -1,0 +1,66 @@
+<h2 mat-dialog-title>{{ titulo }} set</h2>
+
+<mat-dialog-content [formGroup]="form" class="form-grid">
+
+	<!-- Nombre -->
+	<mat-form-field appearance="outline">
+		<mat-label>Nombre</mat-label>
+		<input matInput formControlName="nombre" />
+		<mat-error *ngIf="form.get('nombre')?.hasError('required')">Obligatorio</mat-error>
+	</mat-form-field>
+
+	<!-- Código -->
+	<mat-form-field appearance="outline">
+		<mat-label>Código</mat-label>
+		<input matInput formControlName="codigo" />
+		<mat-error *ngIf="form.get('codigo')?.hasError('required')">Obligatorio</mat-error>
+	</mat-form-field>
+
+	<!-- Logo URL -->
+	<mat-form-field appearance="outline" class="col-span-2">
+		<mat-label>Logo (URL)</mat-label>
+		<input matInput formControlName="logo" placeholder="https://..." />
+		<mat-error *ngIf="form.get('logo')?.hasError('required')">Obligatorio</mat-error>
+	</mat-form-field>
+
+	<!-- Fecha (string dd/MM/yyyy) -->
+	<mat-form-field appearance="outline">
+		<mat-label>Fecha de salida</mat-label>
+		<input matInput formControlName="fechaSalida" placeholder="dd/MM/yyyy" (input)="onFechaInput($event)" />
+		<mat-hint>Formato: dd/MM/yyyy</mat-hint>
+		<mat-error *ngIf="form.get('fechaSalida')?.hasError('required')">Obligatorio</mat-error>
+	</mat-form-field>
+
+	<!-- Activo -->
+	<div class="toggle">
+		<mat-slide-toggle formControlName="esActivo">Activo</mat-slide-toggle>
+	</div>
+
+	<!-- Color -->
+	<mat-form-field appearance="outline">
+		<mat-label>Color</mat-label>
+		<mat-select formControlName="color">
+			<mat-option *ngFor="let c of COLORES" [value]="c.color">
+				<span class="swatch" [style.backgroundColor]="c.color"></span>
+				{{ c.descripcion }}
+			</mat-option>
+		</mat-select>
+		<mat-error *ngIf="form.get('color')?.hasError('required')">Obligatorio</mat-error>
+	</mat-form-field>
+
+	<!-- Preview -->
+	<div class="preview col-span-2">
+		<div class="preview-color" [style.backgroundColor]="form.value.color || '#eee'"></div>
+		<img *ngIf="form.value.logo?.trim()" class="preview-logo" [src]="form.value.logo" alt="logo" />
+	</div>
+
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+	<button mat-button (click)="Importar()">Importar</button>
+	<button mat-button mat-dialog-close>Cancelar</button>
+	<button mat-flat-button color="primary" (click)="Guardar()" [disabled]="form.invalid">
+		<mat-icon>save</mat-icon>
+		Guardar
+	</button>
+</mat-dialog-actions>

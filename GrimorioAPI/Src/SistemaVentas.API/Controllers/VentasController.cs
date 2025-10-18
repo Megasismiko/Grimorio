@@ -5,13 +5,13 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Grimorio.API.Controllers
 {
-    [Route("api/venta")]
+    [Route("api/ventas")]
     [ApiController]
-    public class VentaController : ControllerBase
+    public class VentasController : ControllerBase
     {
         private readonly IVentaService _ventaService;
 
-        public VentaController(IVentaService ventaService)
+        public VentasController(IVentaService ventaService)
         {
             _ventaService = ventaService;
         }

@@ -7,6 +7,8 @@ import { VentasComponent } from './components/layout/pages/ventas/ventas';
 import { HistorialComponent } from './components/layout/pages/historial/historial';
 import { ReporteComponent } from './components/layout/pages/reporte/reporte';
 import { LoginComponent } from './components/login/login';
+import { SetsComponent } from './components/layout/pages/sets/sets';
+import { CartaComponent } from './components/layout/pages/carta/carta';
 
 export const routes: Routes = [
 	{ path: '', redirectTo: 'login', pathMatch: 'full' },
@@ -18,7 +20,10 @@ export const routes: Routes = [
 			{ path: '', redirectTo: 'dashboard', pathMatch: 'full' },
 			{ path: 'dashboard', component: DashboardComponent },
 			{ path: 'usuarios', component: UsuariosComponent },
-			{ path: 'cartas', component: CartasComponent },
+			{ path: 'sets', component: SetsComponent },
+			{ path: 'set/:idSet', component: CartasComponent },
+			{ path: 'set/:idSet/carta/:idCarta', component: CartaComponent },
+			{ path: 'set/:idSet/carta/nueva', component: CartaComponent },
 			{ path: 'ventas', component: VentasComponent },
 			{ path: 'historial', component: HistorialComponent },
 			{ path: 'reporte', component: ReporteComponent }

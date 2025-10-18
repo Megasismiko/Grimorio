@@ -5,26 +5,27 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Grimorio.API.Controllers
 {
-    [Route("api/set")]
+    [Route("api/roles")]
     [ApiController]
-    public class SetController : ControllerBase
+    public class RolesController : ControllerBase
     {
-        private readonly ISetService _setService;
 
-        public SetController(ISetService setService)
+        private readonly IRolService _rolService;
+
+        public RolesController(IRolService rolService)
         {
-            _setService = setService;
+            _rolService = rolService;
         }
 
         [HttpGet]
         [Route("lista")]
         public async Task<IActionResult> Lista()
         {
-            Response<List<SetDTO>> res = new();
+            Response<List<RolDTO>> res = new();
 
             try
             {
-                res.value = await _setService.Lista();
+                res.value = await _rolService.Lista();
             }
             catch (Exception ex)
             {
@@ -34,6 +35,5 @@ namespace Grimorio.API.Controllers
 
             return Ok(res);
         }
-
     }
 }

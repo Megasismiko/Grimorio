@@ -6,3 +6,40 @@ html, body { height: 100%; margin: 0; }
 body {  font-family: Roboto, "Helvetica Neue", sans-serif; }
 app-root { min-height: 100vh; display: flex; flex-direction: column; }
 mat-sidenav-container { flex: 1 1 auto; }
+
+.mat-mdc-dialog-content {
+  padding-top: 1em !important;
+}
+
+/* Botón rojo */
+.btn-rojo {
+  background-color: #d32f2f !important;  /* rojo Material-ish */
+  color: white !important;
+}
+.btn-rojo:hover {
+  background-color: #b71c1c !important;
+}
+
+/* Botón verde */
+.btn-verde {
+  background-color: #388e3c !important;
+  color: white !important;
+}
+.btn-verde:hover {
+  background-color: #2e7d32 !important;
+}
+
+/* Botón azul */
+.btn-azul {
+  background-color: #1565c0 !important;
+  color: white !important;
+}
+.btn-azul:hover {
+  background-color: #0d47a1 !important;
+}
+
+.btn-rojo, .btn-verde, .btn-azul {
+  border-radius: 6px;
+  font-weight: 500;
+  text-transform: none;
+}

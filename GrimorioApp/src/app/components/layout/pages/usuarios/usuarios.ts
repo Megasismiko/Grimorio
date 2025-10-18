@@ -2,13 +2,13 @@ import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 import { Usuario } from '../../../../interfaces/usuario';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
-import { UsuarioService } from '../../../../services/usuario.service';
+import { UsuariosService } from '../../../../services/usuarios.service';
 import { ModalUsuario } from '../../modals/modal-usuario/modal-usuario';
-import Swal from 'sweetalert2';
 import { SHARED_IMPORTS } from '../../../../reutilizable/shared.imports';
 import { MatDialog } from '@angular/material/dialog';
 import { UtilidadService } from '../../../../reutilizable/utilidad.service';
 import { MatSort } from '@angular/material/sort';
+import Swal from 'sweetalert2';
 
 @Component({
 	selector: 'app-usuarios',
@@ -25,7 +25,7 @@ export class UsuariosComponent implements OnInit, AfterViewInit {
 	@ViewChild(MatSort) sort!: MatSort;
 
 	constructor(
-		private _usuario: UsuarioService,
+		private _usuario: UsuariosService,
 		private dialog: MatDialog,
 		private _util: UtilidadService
 	) {

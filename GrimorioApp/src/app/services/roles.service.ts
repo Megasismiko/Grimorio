@@ -5,19 +5,19 @@ import { enviroment } from '../../enviroments/enviroment';
 import { ResponseApi } from '../interfaces/response-api';
 
 @Injectable({
-  providedIn: 'root'
+	providedIn: 'root'
 })
-export class RolService {
+export class RolesService {
 
-  private url: string = `${enviroment.endpoint}rol/`;
+	private url: string = `${enviroment.endpoint}roles/`;
 
-  constructor(
-    private _http: HttpClient
-  ) {
-  }
+	constructor(
+		private _http: HttpClient
+	) {
+	}
 
-  public Lista(): Observable<ResponseApi> {
-    return this._http.get<ResponseApi>(`${this.url}lista`);
-  }
+	public Lista(): Observable<ResponseApi> {
+		return this._http.get<ResponseApi>(`${this.url}lista`);
+	}
 
 }

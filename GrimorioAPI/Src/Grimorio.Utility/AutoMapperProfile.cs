@@ -23,9 +23,6 @@ namespace Grimorio.Utility
                 .ForMember(
                     destino => destino.RolDescripcion,
                     opt => opt.MapFrom(origen => origen.IdRolNavigation.Nombre)
-                ).ForMember(
-                    destino => destino.EsActivo,
-                    opt => opt.MapFrom(origen => origen.EsActivo == true ? 1 : 0)
                 );
 
 
@@ -39,9 +36,6 @@ namespace Grimorio.Utility
                 .ForMember(
                     destino => destino.IdRolNavigation,
                     opt => opt.Ignore()
-                ).ForMember(
-                    destino => destino.EsActivo,
-                    opt => opt.MapFrom(origen => origen.EsActivo == 1)
                 );
 
             #endregion
@@ -58,9 +52,6 @@ namespace Grimorio.Utility
                 ).ForMember(
                     destino => destino.Precio,
                     opt => opt.MapFrom(origen => Convert.ToString(origen.Precio.Value, Culture.Current))
-                ).ForMember(
-                    destino => destino.EsActivo,
-                    opt => opt.MapFrom(origen => origen.EsActivo == true ? 1 : 0)
                 );
 
 
@@ -71,9 +62,6 @@ namespace Grimorio.Utility
                ).ForMember(
                    destino => destino.Precio,
                    opt => opt.MapFrom(origen => Convert.ToDecimal(origen.Precio, Culture.Current))
-               ).ForMember(
-                   destino => destino.EsActivo,
-                   opt => opt.MapFrom(origen => origen.EsActivo == 1 )
                );
             #endregion
 

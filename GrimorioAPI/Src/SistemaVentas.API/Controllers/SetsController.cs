@@ -5,26 +5,26 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Grimorio.API.Controllers
 {
-    [Route("api/carta")]
+    [Route("api/sets")]
     [ApiController]
-    public class CartaController : ControllerBase
+    public class SetsController : ControllerBase
     {
-        private readonly ICartaService _cartaService;
+        private readonly ISetService _setService;
 
-        public CartaController(ICartaService cartaService)
+        public SetsController(ISetService setService)
         {
-            _cartaService = cartaService;
+            _setService = setService;
         }
 
         [HttpGet]
         [Route("lista")]
         public async Task<IActionResult> Lista()
         {
-            Response<List<CartaDTO>> res = new();
+            Response<List<SetDTO>> res = new();
 
             try
             {
-                res.value = await _cartaService.Lista();
+                res.value = await _setService.Lista();
             }
             catch (Exception ex)
             {
@@ -33,17 +33,17 @@ namespace Grimorio.API.Controllers
             }
 
             return Ok(res);
-        }     
+        }
 
         [HttpPost]
         [Route("crear")]
-        public async Task<IActionResult> Crear([FromBody] CartaDTO carta)
+        public async Task<IActionResult> Crear([FromBody] SetDTO set)
         {
-            Response<CartaDTO> res = new();
+            Response<SetDTO> res = new();
 
             try
             {
-                res.value = await _cartaService.Crear(carta);
+                res.value = await _setService.Crear(set);
             }
             catch (Exception ex)
             {
@@ -56,13 +56,13 @@ namespace Grimorio.API.Controllers
 
         [HttpPut]
         [Route("editar")]
-        public async Task<IActionResult> Editar([FromBody] CartaDTO carta)
+        public async Task<IActionResult> Editar([FromBody] SetDTO set)
         {
             Response<bool> res = new();
 
             try
             {
-                res.value = await _cartaService.Editar(carta);
+                res.value = await _setService.Editar(set);
             }
             catch (Exception ex)
             {
@@ -81,7 +81,7 @@ namespace Grimorio.API.Controllers
 
             try
             {
-                res.value = await _cartaService.Eliminar(id);
+                res.value = await _setService.Eliminar(id);
             }
             catch (Exception ex)
             {

@@ -76,7 +76,6 @@ namespace Grimorio.DAL.DBContext;
             entity.Property(e => e.Tipo)
                 .HasMaxLength(100)
                 .IsUnicode(false);
-
             entity.HasOne(d => d.IdSetNavigation).WithMany(p => p.Carta)
                 .HasForeignKey(d => d.IdSet)
                 .HasConstraintName("FK__Cartas__IdSet__48CFD27E");
@@ -162,6 +161,10 @@ namespace Grimorio.DAL.DBContext;
             entity.Property(e => e.Codigo)
                 .HasMaxLength(5)
                 .IsUnicode(false);
+            entity.Property(e => e.Color)
+               .HasMaxLength(7)
+               .IsUnicode(false)
+               .HasDefaultValueSql("#C2A878");
             entity.Property(e => e.EsActivo).HasDefaultValue(true);
             entity.Property(e => e.FechaRegistro)
                 .HasDefaultValueSql("(getdate())")

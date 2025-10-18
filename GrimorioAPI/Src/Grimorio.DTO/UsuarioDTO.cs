@@ -12,7 +12,7 @@
 
         public string? Clave { get; set; }
 
-        public int? EsActivo { get; set; }
+        public bool? EsActivo { get; set; }
 
         public string? RolDescripcion { get; set; }
 

@@ -5,13 +5,13 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Grimorio.API.Controllers
 {
-    [Route("api/usuario")]
+    [Route("api/usuarios")]
     [ApiController]
-    public class UsuarioController : ControllerBase
+    public class UsuariosController : ControllerBase
     {
         private readonly IUsuarioService _usuarioService;
 
-        public UsuarioController(IUsuarioService usuarioService)
+        public UsuariosController(IUsuarioService usuarioService)
         {
             _usuarioService = usuarioService;
         }

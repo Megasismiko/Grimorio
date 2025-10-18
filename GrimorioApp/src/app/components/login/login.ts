@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { SHARED_IMPORTS } from '../../reutilizable/shared.imports';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { UsuarioService } from '../../services/usuario.service';
+import { UsuariosService } from '../../services/usuarios.service';
 import { Login } from '../../interfaces/login';
 import { UtilidadService } from '../../reutilizable/utilidad.service';
 import { Router } from '@angular/router';
@@ -21,7 +21,7 @@ export class LoginComponent {
 
 	constructor(
 		private fb: FormBuilder,
-		private _usuario: UsuarioService,
+		private _usuario: UsuariosService,
 		private _util: UtilidadService,
 		private router: Router
 	) {

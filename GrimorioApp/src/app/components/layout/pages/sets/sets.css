@@ -1,0 +1,104 @@
+/* --- Página general --- */
+.page {
+  padding: 16px;
+}
+
+/* --- Cabecera --- */
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin-bottom: 24px;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.title h1 {
+  margin: 0;
+  font-size: 26px;
+  font-weight: 600;
+}
+
+.subtitle {
+  font-size: 14px;
+  color: gray;
+}
+
+.actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.filter {
+  width: 260px;
+}
+
+/* --- Loading centrado --- */
+.loading {
+  display: grid;
+  place-items: center;
+  height: 160px;
+}
+
+/* --- Grid responsivo de cards --- */
+.cards-grid {
+  display: grid;
+  gap: 16px;
+  grid-template-columns: repeat(auto-fill, minmax(390px, 1fr));
+}
+
+
+/* --- Tarjetas estilo sobre --- */
+.set-card {
+  border-radius: 16px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  min-height: 260px;
+}
+
+.set-logo {
+  width: 100%;
+  height: 120px;
+  object-fit: contain;
+  background: rgba(0, 0, 0, 0.03);
+  padding: 12px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+}
+
+.avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 8px;
+  background: rgba(0, 0, 0, 0.08);
+  display: grid;
+  place-items: center;
+  font-weight: 600;
+  font-size: 12px;
+}
+
+/* --- Estado vacío --- */
+.empty {
+  display: grid;
+  place-items: center;
+  gap: 8px;
+  padding: 24px 0;
+  color: rgba(0, 0, 0, 0.6);
+}
+.empty mat-icon {
+  font-size: 40px;
+  height: 40px;
+  width: 40px;
+}
+
+.card-actions {
+  display: flex;
+  justify-content: space-between;
+  padding: 16px
+}
+
+
+.card-actions button mat-icon {
+  margin-right: 6px;
+}

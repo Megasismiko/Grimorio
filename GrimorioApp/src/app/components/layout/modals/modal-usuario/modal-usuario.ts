@@ -3,8 +3,8 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { Rol } from '../../../../interfaces/rol';
 import { Usuario } from '../../../../interfaces/usuario';
-import { UsuarioService } from '../../../../services/usuario.service';
-import { RolService } from '../../../../services/rol.service';
+import { UsuariosService } from '../../../../services/usuarios.service';
+import { RolesService } from '../../../../services/roles.service';
 import { UtilidadService } from '../../../../reutilizable/utilidad.service';
 import { SHARED_IMPORTS } from '../../../../reutilizable/shared.imports';
 
@@ -24,8 +24,8 @@ export class ModalUsuario implements OnInit {
 		private modal: MatDialogRef<ModalUsuario>,
 		@Inject(MAT_DIALOG_DATA) public usuario: Usuario,
 		private fb: FormBuilder,
-		private _usuario: UsuarioService,
-		private _rol: RolService,
+		private _usuario: UsuariosService,
+		private _rol: RolesService,
 		private _util: UtilidadService
 	) {
 		this.form = this.fb.group({
@@ -57,7 +57,7 @@ export class ModalUsuario implements OnInit {
 				correo: this.usuario.correo,
 				idRol: this.usuario.idRol,
 				clave: this.usuario.clave,
-				esActivo: this.form.value.esActivo ? 1 : 0
+				esActivo: this.form.value.esActivo
 			})
 		}
 	}
@@ -70,7 +70,7 @@ export class ModalUsuario implements OnInit {
 			idRol: this.form.value.idRol,
 			clave: this.form.value.clave,
 			rolDescripcion: '',
-			esActivo: this.form.value.esActivo ? 1 : 0
+			esActivo: this.form.value.esActivo
 		};
 
 		if (this.usuario) {

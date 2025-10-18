@@ -21,5 +21,7 @@ public partial class Set
 
     public DateTime? FechaRegistro { get; set; }
 
+    public string? Color {  get; set; }
+
     public virtual ICollection<Carta> Carta { get; set; } = new List<Carta>();
 }

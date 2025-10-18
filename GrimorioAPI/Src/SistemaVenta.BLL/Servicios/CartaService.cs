@@ -32,6 +32,20 @@ namespace Grimorio.BLL.Servicios
             }
         }
 
+        public async Task<List<CartaDTO>> ListaSet(int id)
+        {
+            try
+            {
+                var query = await _cartaRepository.Consultar(c => c.IdSet == id);
+                var cartas = query.Include(set => set.IdSetNavigation).ToList();
+                return _mapper.Map<List<CartaDTO>>(cartas);
+            }
+            catch
+            {
+                throw;
+            }
+        }
+
         public async Task<CartaDTO> Crear(CartaDTO dto)
         {
             try
@@ -64,10 +78,20 @@ namespace Grimorio.BLL.Servicios
                     throw new TaskCanceledException("La carta no existe");
 
                 cartaExistente.Nombre = carta.Nombre;
-                cartaExistente.Stock= carta.Stock;
+                cartaExistente.Stock = carta.Stock;
                 cartaExistente.Precio = carta.Precio;
                 cartaExistente.IdSet = carta.IdSet;
                 cartaExistente.EsActivo = carta.EsActivo;
+                cartaExistente.Coste = carta.Coste;
+                cartaExistente.Tipo = carta.Tipo;
+                cartaExistente.Rareza = carta.Rareza;
+                cartaExistente.Texto = carta.Texto;
+                cartaExistente.Artista = carta.Artista;
+                cartaExistente.Numero = carta.Numero;
+                cartaExistente.Poder = carta.Poder;
+                cartaExistente.Resistencia = carta.Resistencia;
+                cartaExistente.ImagenUrl = carta.ImagenUrl;
+
 
                 bool result = await _cartaRepository.Editar(cartaExistente);
                 if (!result)
@@ -102,5 +126,7 @@ namespace Grimorio.BLL.Servicios
                 throw;
             }
         }
+
+
     }
 }
