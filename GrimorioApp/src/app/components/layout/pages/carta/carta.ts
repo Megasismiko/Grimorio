@@ -6,24 +6,27 @@ import { CartasService } from '../../../../services/cartas.service';
 import { SHARED_IMPORTS } from '../../../../reutilizable/shared.imports';
 import { Set } from '../../../../interfaces/set';
 import { SetsService } from '../../../../services/sets.service';
+import { CabeceraSetComponent } from '../../../reutilizable/cabecera-set/cabecera-set';
+import { Carta } from '../../../../interfaces/carta';
 @Component({
 	standalone: true,
 	selector: 'app-carta',
 	imports: [
-		...SHARED_IMPORTS
+		...SHARED_IMPORTS,
+		CabeceraSetComponent
 	],
 	templateUrl: './carta.html',
 	styleUrls: ['./carta.css'],
 })
 export class CartaComponent implements OnInit {
 
-
+	DEFAULT_IMG = 'https://gatherer.wizards.com/assets/card_back.webp';
 	private route = inject(ActivatedRoute);
 	private router = inject(Router);
 	private fb = inject(FormBuilder);
 	private snack = inject(MatSnackBar);
 
-	set = signal<Set | null>(null);
+	setSignal = signal<Set | null>(null);
 	idSet = 0;
 	idCarta: number | null = null;
 	imgError = signal<boolean>(false);
@@ -44,7 +47,7 @@ export class CartaComponent implements OnInit {
 		numero: [''],
 		poder: [''],
 		resistencia: [''],
-		imagenUrl: [''],
+		imagenUrl: [this.DEFAULT_IMG],
 		esActivo: [true],
 	});
 
@@ -103,10 +106,10 @@ export class CartaComponent implements OnInit {
 		this.setsService.GetSetById(this.idSet).subscribe({
 			next: (res) => {
 				if (res?.status) {
-					this.set.set(res.value as Set);
+					this.setSignal.set(res.value as Set);
 				} else {
 					console.error('Error al cargar el set');
-					this.set.set(null);
+					this.setSignal.set(null);
 				}
 				this.loading.set(false);
 			},
@@ -137,7 +140,7 @@ export class CartaComponent implements OnInit {
 						numero: c.numero ?? '',
 						poder: c.poder ?? '',
 						resistencia: c.resistencia ?? '',
-						imagenUrl: c.imagenUrl ?? '',
+						imagenUrl: c.imagenUrl ?? this.DEFAULT_IMG,
 						esActivo: c.esActivo ?? true,
 					});
 				} else {
@@ -160,11 +163,23 @@ export class CartaComponent implements OnInit {
 			return;
 		}
 
-		const dto: any = {
+		const dto: Carta = {
 			idCarta: this.isEdit() ? this.idCarta ?? 0 : 0,
 			idSet: this.idSet,
 			descripcionSet: '',
-			...this.form.value,
+			nombre: this.form.value.nombre ?? '',
+			precio: (this.form.value.precio ?? '0').toString(),
+			stock: this.form.value.stock ?? 0,
+			tipo: this.form.value.tipo ?? '',
+			rareza: this.form.value.rareza ?? '',
+			coste: this.form.value.coste ?? '',
+			texto: this.form.value.texto ?? '',
+			artista: this.form.value.artista ?? '',
+			numero: this.form.value.numero ?? '',
+			poder: this.form.value.poder ?? '',
+			resistencia: this.form.value.resistencia ?? '',
+			imagenUrl: this.form.value.imagenUrl ?? this.DEFAULT_IMG,
+			esActivo: this.form.value.esActivo ?? true,
 		};
 
 		this.saving.set(true);

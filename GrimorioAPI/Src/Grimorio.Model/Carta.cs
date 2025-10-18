@@ -24,7 +24,7 @@ public partial class Carta
 
     public string? ImagenUrl { get; set; }
 
-    public int? IdSet { get; set; }
+    public int IdSet { get; set; }
 
     public int? Stock { get; set; }
 

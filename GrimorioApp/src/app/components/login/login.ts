@@ -1,65 +1,89 @@
-import { Component } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { SHARED_IMPORTS } from '../../reutilizable/shared.imports';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Validators, NonNullableFormBuilder } from '@angular/forms';
 import { UsuariosService } from '../../services/usuarios.service';
-import { Login } from '../../interfaces/login';
 import { UtilidadService } from '../../reutilizable/utilidad.service';
 import { Router } from '@angular/router';
-import { finalize, take } from 'rxjs/operators';
+import { Login } from '../../interfaces/login';
+import { finalize } from 'rxjs';
+
+type LoginForm = ReturnType<typeof buildForm>;
+
+function buildForm(fb: NonNullableFormBuilder) {
+	return fb.group({
+		email: fb.control('', { validators: [Validators.required, Validators.email] }),
+		password: fb.control('', { validators: [Validators.required, Validators.minLength(4)] }),
+	});
+}
 
 @Component({
 	standalone: true,
 	selector: 'app-login',
 	imports: [...SHARED_IMPORTS],
 	templateUrl: './login.html',
-	styleUrls: ['./login.css'] // 👈 importante: plural
+	styleUrls: ['./login.css']
 })
-export class LoginComponent {
+export class LoginComponent implements OnInit {
+
+	// UI state
 	hide = true;
-	form: FormGroup;
 	loading = false;
 
-	constructor(
-		private fb: FormBuilder,
-		private _usuario: UsuariosService,
-		private _util: UtilidadService,
-		private router: Router
-	) {
-		this.form = this.fb.group({
-			email: ['', [Validators.required, Validators.email]],
-			password: ['', [Validators.required]]
-		});
+	private fb = inject(NonNullableFormBuilder);
+	private usuario = inject(UsuariosService);
+	private util = inject(UtilidadService);
+	private router = inject(Router);
+
+	form: LoginForm = buildForm(this.fb);
+	get fc() { return this.form.controls; }
+
+	ngOnInit() {
+		const sesion = this.util.ObtenerUsuarioSesion(); // unificada
+		if (sesion) {
+			this.router.navigate(['pages']);
+		}
 	}
 
 	onSubmit() {
-		if (this.form.invalid || this.loading) return;
+		if (this.loading) return;
+		if (this.form.invalid) {
+			this.form.markAllAsTouched();
+			return;
+		}
 
 		this.loading = true;
 		this.form.disable();
 
-		const data: Login = {
-			correo: (this.form.value.email ?? '').trim(),
-			clave: (this.form.value.password ?? '').trim()
+		const { email, password } = this.form.getRawValue();
+		const payload: Login = {
+			correo: email.trim(),
+			clave: password.trim(),
 		};
 
-		this._usuario.Login(data).pipe(
-			take(1),
+		this.usuario.Login(payload).pipe(
 			finalize(() => {
 				this.loading = false;
 				this.form.enable();
 			})
 		).subscribe({
 			next: (res: any) => {
-				if (res?.status) {
-					this._util.GuardarUsuarioSesion(res.value);
+				if (res?.status && res?.value?.token) {
+					// Guarda toda la sesión (incluye token y expira)
+					this.util.GuardarUsuarioSesion(res.value);
 					this.router.navigate(['pages']);
 				} else {
-					this._util.MostarAlerta(res?.msg ?? 'Credenciales incorrectas', 'Error');
+					const msg = res?.message ?? res?.msg ?? 'Credenciales incorrectas o token no emitido';
+					this.util.MostarAlerta(msg, 'Error');
 				}
 			},
 			error: (err: any) => {
-				const msg = err?.error?.msg ?? err?.msg ?? 'Ocurrió un error al iniciar sesión';
-				this._util.MostarAlerta(msg, 'Error');
+				const msg =
+					err?.error?.message ??
+					err?.error?.msg ??
+					err?.message ??
+					err?.msg ??
+					'Ocurrió un error al iniciar sesión';
+				this.util.MostarAlerta(msg, 'Error');
 			}
 		});
 	}

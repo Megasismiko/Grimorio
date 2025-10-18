@@ -1,0 +1,39 @@
+@if (set) {
+<mat-card class="set-hero" [style.--accent]="set.color">
+	<div class="hero-bg"></div>
+
+	<div class="hero-left">
+		<div class="logo-wrap">
+			<img class="set-logo" [src]="set.logo" [alt]="set.nombre" />
+		</div>
+	</div>
+
+	<div class="hero-right">
+		<div class="hero-top">
+			<h1 class="set-title">
+				{{ set.nombre }}
+				<span class="set-code">{{ set.codigo }}</span>
+			</h1>
+
+			<app-chip-es-activo [esActivo]="set.esActivo"></app-chip-es-activo>
+		</div>
+
+		<div class="hero-meta">
+			<div class="meta-item" title="Color del set">
+				<span class="color-dot" [style.background]="set.color"></span>
+				<span>Color</span>
+			</div>
+
+			<div class="meta-item">
+				<mat-icon inline>event</mat-icon>
+				<span>{{ set.fechaSalida }}</span>
+			</div>
+
+			<div class="meta-item">
+				<mat-icon inline>collections</mat-icon>
+				<span>{{ set.cartas?.length ?? 0 }} cartas</span>
+			</div>
+		</div>
+	</div>
+</mat-card>
+}

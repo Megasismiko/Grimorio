@@ -10,16 +10,28 @@ import { LoginComponent } from './components/login/login';
 import { SetsComponent } from './components/layout/pages/sets/sets';
 import { CartaComponent } from './components/layout/pages/carta/carta';
 
+// 👇 importa guards
+import { AuthGuard } from './guards/auth.guard';
+import { RolGuard } from './guards/rol.guard';
+import { LoginRedirectGuard } from './guards/login-redirect.guard';
+
 export const routes: Routes = [
 	{ path: '', redirectTo: 'login', pathMatch: 'full' },
-	{ path: 'login', component: LoginComponent },
+
+	// Evita mostrar login si ya estás logueado
+	{ path: 'login', component: LoginComponent, canActivate: [LoginRedirectGuard] },
+
 	{
 		path: 'pages',
 		component: LayoutComponent,
+		canActivate: [AuthGuard],
 		children: [
 			{ path: '', redirectTo: 'dashboard', pathMatch: 'full' },
 			{ path: 'dashboard', component: DashboardComponent },
-			{ path: 'usuarios', component: UsuariosComponent },
+
+			// Solo Administrador
+			{ path: 'usuarios', component: UsuariosComponent, canActivate: [RolGuard], data: { roles: ['Administrador'] } },
+
 			{ path: 'sets', component: SetsComponent },
 			{ path: 'set/:idSet', component: CartasComponent },
 			{ path: 'set/:idSet/carta/:idCarta', component: CartaComponent },
@@ -29,5 +41,6 @@ export const routes: Routes = [
 			{ path: 'reporte', component: ReporteComponent }
 		]
 	},
+
 	{ path: '**', redirectTo: 'login' }
 ];

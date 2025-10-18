@@ -1,24 +1,40 @@
 <mat-toolbar color="primary">
 	<mat-toolbar-row>
-		<h1>Grimorio</h1>
+
+		<!-- Botón menú a la izquierda -->
 		<button mat-icon-button (click)="sidenav.toggle()">
 			<mat-icon style="color: white;">menu</mat-icon>
 		</button>
+
+		<!--  Título -->
+		<h1 style="margin-left: 10px;">Grimorio</h1>
+
+		<!--  Empuja el contenido a la derecha -->
+		<span class="spacer"></span>
+
+		<!--  Info del usuario -->
+		<div class="user-info" *ngIf="sesion as s">
+			<span>{{ s.nombreCompleto }} ({{ s.rolDescripcion }})</span>
+			<mat-icon (click)="logout()">logout</mat-icon>
+
+		</div>
+
 	</mat-toolbar-row>
 </mat-toolbar>
+
 
 <mat-sidenav-container>
 	<mat-sidenav #sidenav opened="false" mode="side" style="width: 200px;">
 		<mat-nav-list>
 			@if (menu$ | async; as menu) {
 			@for (item of menu; track item.url) {
-				<a mat-list-item [routerLink]="item.url" routerLinkActive="active-link">
-					<mat-icon matListItemIcon>{{ item.icono }}</mat-icon>
-					<div matListItemTitle>{{ item.nombre }}</div>
-				</a>
-				}
+			<a mat-list-item [routerLink]="item.url" routerLinkActive="active-link">
+				<mat-icon matListItemIcon>{{ item.icono }}</mat-icon>
+				<div matListItemTitle>{{ item.nombre }}</div>
+			</a>
+			}
 			} @else {
-				<div class="empty">Cargando menú…</div>
+			<div class="empty">Cargando menú…</div>
 			}
 		</mat-nav-list>
 	</mat-sidenav>

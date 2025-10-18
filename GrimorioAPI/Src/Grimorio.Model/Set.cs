@@ -23,5 +23,5 @@ public partial class Set
 
     public string? Color {  get; set; }
 
-    public virtual ICollection<Carta> Cartas { get; set; } = new List<Carta>();
+    public virtual ICollection<Carta> Cartas { get; set; } = [];
 }

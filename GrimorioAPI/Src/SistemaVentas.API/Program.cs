@@ -1,6 +1,11 @@
 using Grimorio.IOC;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
+
+//configurar jwt
+var jwt = builder.Configuration.GetSection("Jwt");
+var key = Encoding.UTF8.GetBytes(jwt["Key"]!);
 
 // Add services to the container.
 builder.Services.InyectarDependencias(builder.Configuration);
@@ -31,6 +36,7 @@ if (app.Environment.IsDevelopment())
 //usar politica de CORS en localhost
 app.UseCors("local");
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();

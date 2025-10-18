@@ -10,5 +10,8 @@
      
         public string? RolDescripcion { get; set; }
 
+        public string Token { get; set; } = string.Empty;
+        public DateTime Expira { get; set; }
+
     }
 }

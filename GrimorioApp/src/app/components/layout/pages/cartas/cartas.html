@@ -1,55 +1,19 @@
-<mat-card class="set-hero" *ngIf="set() as s" [style.--accent]="s.color">
-	<div class="hero-bg"></div>
+@let set = setSignal();
 
-	<div class="hero-left">
-		<div class="logo-wrap">
-			<img class="set-logo" [src]="s.logo" [alt]="s.nombre" />
-		</div>
-	</div>
+<app-cabecera-set [set]="set"></app-cabecera-set>
 
-	<div class="hero-right">
-		<div class="hero-top">
-			<h1 class="set-title">
-				{{ s.nombre }}
-				<span class="set-code">{{ s.codigo }}</span>
-			</h1>
 
-			<div class="status">
-				<span class="status-chip" [class.ok]="s.esActivo" [class.nok]="!s.esActivo">
-					<mat-icon inline>{{ s.esActivo ? 'check_circle' : 'cancel' }}</mat-icon>
-					{{ s.esActivo ? 'Activo' : 'Inactivo' }}
-				</span>
-			</div>
-		</div>
-
-		<div class="hero-meta">
-			<div class="meta-item" title="Color del set">
-				<span class="color-dot" [style.background]="s.color"></span>
-				<span>Color</span>
-			</div>
-
-			<div class="meta-item">
-				<mat-icon inline>event</mat-icon>
-				<span>{{ s.fechaSalida }}</span>
-			</div>
-
-			<div class="meta-item">
-				<mat-icon inline>collections</mat-icon>
-				<span>{{ s.cartas?.length ?? 0 }} cartas</span>
-			</div>
-		</div>
-	</div>
-</mat-card>
-
-<!-- Filtros -->
-<div class="filters" *ngIf="set()">
+@if (set) {
+<div class="filters">
 	<mat-form-field appearance="outline" class="search-field">
 		<mat-label>Buscar</mat-label>
 		<input matInput placeholder="Nombre, tipo o rareza…" [ngModel]="searchTerm()"
 			(ngModelChange)="searchTerm.set($event)" />
-		<button mat-icon-button matSuffix aria-label="Clear" *ngIf="searchTerm()" (click)="searchTerm.set('')">
+		@if (searchTerm()) {
+		<button mat-icon-button matSuffix aria-label="Clear" (click)="searchTerm.set('')">
 			<mat-icon>close</mat-icon>
 		</button>
+		}
 	</mat-form-field>
 
 	<mat-form-field appearance="outline" class="rareza-field">
@@ -65,30 +29,37 @@
 
 	<button mat-flat-button color="primary">
 		<mat-icon>add</mat-icon>
-		Crear Carta
+		Importar
+	</button>
+
+	<button mat-flat-button color="primary" [routerLink]="['/pages/set', idSet, 'carta','nueva']">
+		<mat-icon>add</mat-icon>
+		Nueva
 	</button>
 </div>
+}
 
-<!-- Loading -->
-<div class="loading" *ngIf="loading()">
+@if (loading()) {
+<div class="loading">
 	<mat-spinner diameter="40"></mat-spinner>
 </div>
+}
 
-<!-- Grid de cartas (6 por fila) -->
-<section class="grid" *ngIf="!loading() && filteredCartas().length; else emptyState">
-	<a class="card" *ngFor="let c of filteredCartas(); trackBy: trackByCarta" [title]="c.nombre"
-		[ngClass]="c.rareza.toLowerCase()" [routerLink]="['/pages/set', idSet, 'carta', c.idCarta]">
+@if (!loading() && filteredCartas().length) {
+<section class="grid">
+	@for (c of filteredCartas(); track c.idCarta) {
+	<a class="card" [title]="c.nombre" [ngClass]="c.rareza.toLowerCase()"
+		[routerLink]="['/pages/set', idSet, 'carta', c.idCarta]">
 		<mat-card class="mat-card-compact">
 			<div class="thumb">
 				<img [src]="c.imagenUrl" [alt]="c.nombre" loading="lazy" />
 			</div>
 		</mat-card>
 	</a>
-
+	}
 </section>
-
-<ng-template #emptyState>
-	<div class="empty" *ngIf="!loading()">
-		El Set no existe.
-	</div>
-</ng-template>
+} @else {
+@if (!loading()) {
+<div class="empty">El Set no tiene cartas.</div>
+}
+}

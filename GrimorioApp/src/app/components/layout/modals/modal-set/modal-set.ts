@@ -19,6 +19,8 @@ export class ModalSet implements OnInit {
 	form: FormGroup;
 	titulo = 'Crear';
 
+	DEFAULT_LOGO = 'https://svgs.scryfall.io/sets/one.svg';
+
 	readonly COLORES = SET_COLORES_CONST;
 
 	constructor(
@@ -32,7 +34,7 @@ export class ModalSet implements OnInit {
 			nombre: ['', [Validators.required]],
 			esActivo: [true],
 			codigo: ['', [Validators.required]],
-			logo: ['', [Validators.required]],
+			logo: [this.DEFAULT_LOGO],
 			fechaSalida: ['', [Validators.required]],
 			color: [this.COLORES[0].color, [Validators.required]]
 		});
@@ -46,7 +48,7 @@ export class ModalSet implements OnInit {
 				nombre: this.set.nombre,
 				esActivo: this.set.esActivo,
 				codigo: this.set.codigo,
-				logo: this.set.logo,
+				logo: this.set.logo || this.DEFAULT_LOGO,
 				fechaSalida: this.onlyDate(this.set.fechaSalida), // solo 10 chars
 				color: this.set.color
 			});
@@ -84,7 +86,7 @@ export class ModalSet implements OnInit {
 			nombre: v.nombre,
 			esActivo: v.esActivo,
 			codigo: v.codigo,
-			logo: v.logo,
+			logo: v.logo || this.DEFAULT_LOGO,
 			fechaSalida: this.onlyDate(v.fechaSalida),
 			color: v.color,
 			cartas: [],
@@ -93,7 +95,6 @@ export class ModalSet implements OnInit {
 
 		const obs = this.set ? this._setsService.Editar(data) : this._setsService.Crear(data);
 		const okMsg = this.set ? 'Set editado' : 'Set creado';
-		const errMsg = this.set ? 'No se pudo editar el set' : 'No se pudo crear el set';
 
 		obs.subscribe({
 			next: res => {
@@ -101,7 +102,7 @@ export class ModalSet implements OnInit {
 					this._util.MostarAlerta(okMsg, 'Success');
 					this.modal.close(true);
 				} else {
-					this._util.MostarAlerta(errMsg, 'Error');
+					this._util.MostarAlerta(res.msg, 'Error');
 					this.modal.close(false);
 				}
 			},

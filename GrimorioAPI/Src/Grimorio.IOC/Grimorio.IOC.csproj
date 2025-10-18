@@ -7,6 +7,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.21" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\Grimorio.DAL\Grimorio.DAL.csproj" />
     <ProjectReference Include="..\Grimorio.Utility\Grimorio.Utility.csproj" />
     <ProjectReference Include="..\SistemaVenta.BLL\Grimorio.BLL.csproj" />

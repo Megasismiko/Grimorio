@@ -1,65 +1,19 @@
-<mat-card class="set-hero" *ngIf="set() as s" [style.--accent]="s.color">
-	<div class="hero-bg"></div>
+@let set = setSignal();
 
-	<div class="hero-left">
-		<div class="logo-wrap">
-			<img class="set-logo" [src]="s.logo" [alt]="s.nombre" />
-		</div>
-	</div>
-
-	<div class="hero-right">
-		<div class="hero-top">
-			<h1 class="set-title">
-				{{ s.nombre }}
-				<span class="set-code">{{ s.codigo }}</span>
-			</h1>
-
-			<div class="status">
-				<span class="status-chip" [class.ok]="s.esActivo" [class.nok]="!s.esActivo">
-					<mat-icon inline>{{ s.esActivo ? 'check_circle' : 'cancel' }}</mat-icon>
-					{{ s.esActivo ? 'Activo' : 'Inactivo' }}
-				</span>
-			</div>
-		</div>
-
-		<div class="hero-meta">
-
-			<div class="meta-item" title="Color del set">
-				<span class="color-dot" [style.background]="s.color"></span>
-				<span>Color</span>
-			</div>
-
-			<div class="meta-item">
-				<mat-icon inline>event</mat-icon>
-				<span>{{ s.fechaSalida }}</span>
-			</div>
-
-			<div class="meta-item">
-				<mat-icon inline>collections</mat-icon>
-				<span>{{ s.cartas?.length ?? 0 }} cartas</span>
-			</div>
-
-			<button mat-stroked-button color="accent" (click)="cancelar()" align="right">
-				<mat-icon>arrow_back</mat-icon>
-				Volver al set
-			</button>
-		</div>
-
-	</div>
-</mat-card>
-<br>
-
+<app-cabecera-set [set]="set"></app-cabecera-set>
 
 <form [formGroup]="form" class="form-grid">
 	<!-- IZQUIERDA: SÓLO PREVIEW -->
 	<div class="col left">
 		<div class="preview sticky">
-			<ng-container *ngIf="(form.get('imagenUrl')?.value || '').trim() as src; else noImg">
-				<img [src]="src" alt="Vista previa" (error)="onImgError()" (load)="onImgLoad()" />
-				<div class="img-error" *ngIf="imgError()">No se pudo cargar la imagen</div>
-			</ng-container>
-			<ng-template #noImg><span class="placeholder">Sin imagen</span></ng-template>
+			<img [src]="(form.get('imagenUrl')?.value?.trim() || DEFAULT_IMG)" alt="Vista previa" (error)="onImgError()"
+				(load)="onImgLoad()" />
+			@if(imgError()){
+			<div class="img-error">No se pudo cargar la imagen</div>
+			}
+
 		</div>
+
 		<mat-form-field appearance="outline" class="w100">
 			<mat-label>Imagen (URL)</mat-label>
 			<input matInput formControlName="imagenUrl" placeholder="http://... o https://..." />
@@ -69,6 +23,7 @@
 			<mat-slide-toggle formControlName="esActivo">Activo</mat-slide-toggle>
 		</div>
 	</div>
+
 
 	<!-- DERECHA: TODOS LOS CAMPOS -->
 	<div class="col right">
@@ -148,11 +103,12 @@
 
 <div class="actions">
 	<!-- Botón eliminar (solo si estamos editando) -->
-	<button *ngIf="isEdit()" mat-flat-button color="warn" (click)="eliminar()">
+	@if(isEdit()){
+	<button * mat-flat-button color="warn" (click)="eliminar()">
 		<mat-icon>delete</mat-icon>
 		Eliminar
 	</button>
-
+	}
 	<!-- Botón guardar -->
 	<button mat-flat-button color="primary" (click)="guardar()" [disabled]="saving()">
 		<mat-icon>save</mat-icon>

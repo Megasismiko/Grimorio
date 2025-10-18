@@ -1,0 +1,6 @@
+<div class="status">
+	<span class="status-chip" [class.ok]="esActivo" [class.nok]="!esActivo">
+		<mat-icon inline>{{ esActivo ? trueIcon : falseIcon }}</mat-icon>
+		{{ esActivo ? trueLabel : falseLabel }}
+	</span>
+</div>

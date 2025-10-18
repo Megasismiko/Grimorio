@@ -1,20 +1,15 @@
 import { Injectable } from '@angular/core';
-
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Sesion } from '../interfaces/sesion';
 
 @Injectable({
 	providedIn: 'root'
-
 })
 export class UtilidadService {
-	
 
-	constructor(
-		private _snackbar: MatSnackBar
-	) {
+	private readonly KEY_USUARIO = 'usuario';
 
-	}
+	constructor(private _snackbar: MatSnackBar) { }
 
 	public MostarAlerta(msg: string, tipo: string) {
 		this._snackbar.open(msg, tipo, {
@@ -25,16 +20,19 @@ export class UtilidadService {
 	}
 
 	public GuardarUsuarioSesion(sesion: Sesion) {
-		localStorage.setItem('usuario', JSON.stringify(sesion));
+		localStorage.setItem(this.KEY_USUARIO, JSON.stringify(sesion));
 	}
 
-	public ObtenerUsuarioSesion(): Sesion {
-		const data = localStorage.getItem('usuario');
-		const usuario: Sesion = JSON.parse(data!);
-		return usuario;
+	public ObtenerUsuarioSesion(): Sesion | null {
+		const data = localStorage.getItem(this.KEY_USUARIO);
+		return data ? JSON.parse(data) as Sesion : null;
 	}
 
 	public EliminarUsuarioSesion() {
-		localStorage.removeItem('usuario');
+		localStorage.removeItem(this.KEY_USUARIO);
+	}
+
+	public HaySesion(): boolean {
+		return this.ObtenerUsuarioSesion() !== null;
 	}
 }

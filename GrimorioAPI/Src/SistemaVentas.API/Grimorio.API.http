@@ -1,6 +1,0 @@
-@Grimorio.API_HostAddress = http://localhost:5166
-
-GET {{Grimorio.API_HostAddress}}/roles/
-Accept: application/json
-
-###

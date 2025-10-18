@@ -1,10 +1,8 @@
 :host {
   display: block;
-  padding: 16px;
-  box-sizing: border-box;
 }
 
-/* ===== HERO DEL SET ===== */
+/* ===== HERO DEL SET (vive en el hijo) ===== */
 .set-hero {
   position: relative;
   display: grid;
@@ -39,6 +37,7 @@
   place-items: center;
   z-index: 1;
 }
+
 .logo-wrap {
   width: 120px;
   height: 120px;
@@ -109,33 +108,6 @@
   color: color-mix(in srgb, var(--accent) 85%, #e6e6e6);
 }
 
-.status {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.status-chip {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  padding: 6px 10px;
-  border-radius: 10px;
-  font-size: 12px;
-  border: 1px solid;
-  backdrop-filter: blur(6px);
-}
-.status-chip.ok {
-  border-color: rgb(34 197 94);
-  background: rgb(34 197 94);
-  color: #adf0c8;
-}
-.status-chip.nok {
-  border-color: rgb(239 68 68);
-  background: rgb(239 68 68);
-  color: #fecaca;
-}
-
 .hero-meta {
   display: flex;
   align-items: center;
@@ -163,93 +135,9 @@
   box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.25) inset;
 }
 
-/* grid: preview izquierda (fija), form derecha */
-.form-grid {
-  display: grid;
-  grid-template-columns: 380px 1fr; /* izquierda 380px, derecha flexible */
-  gap: 16px;
-  margin-top: 2em;
-}
-
-.col {
-  display: grid;
-  gap: 12px;
-}
-
-/* preview a la izquierda */
-.preview {
-  border: 1px solid var(--mat-sys-outline-variant, #2a2a2a);
-  border-radius: 17px;
-  overflow: hidden;
-  background: #0f0f12;
-  aspect-ratio: 3 / 4;
-  display: grid;
-  place-items: center;
-  position: relative;
-}
-.preview img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-.preview .placeholder {
-  color: var(--mat-sys-on-surface-variant, #9aa0a6);
-  font-size: 13px;
-}
-.preview .img-error {
-  position: absolute;
-  bottom: 8px;
-  left: 8px;
-  right: 8px;
-  background: rgba(239, 68, 68, 0.12);
-  border: 1px solid rgba(239, 68, 68, 0.35);
-  color: #fecaca;
-  border-radius: 8px;
-  padding: 6px 8px;
-  font-size: 12px;
-}
-
-/* sticky en desktop: mantiene la carta visible */
-.sticky {
-  position: sticky;
-  top: 16px;
-}
-
-/* layout de campos a la derecha */
-.row {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 12px;
-}
-.w100 {
-  width: 100%;
-}
-.w50 {
-  width: 100%;
-}
-
-/* responsive */
-@media (max-width: 980px) {
-  .form-grid {
-    grid-template-columns: 1fr; /* apilar en móvil */
+/* Responsive del hero */
+@media (max-width: 720px) {
+  .set-hero {
+    grid-template-columns: 1fr;
   }
-  .sticky {
-    position: static;
-  } /* sin sticky en móvil */
-}
-
-.actions {
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-  gap: 12px;
-  margin-top: 16px;
-}
-
-.actions .spacer {
-  flex: 1;
-}
-
-button mat-icon {
-  margin-right: 6px;
 }

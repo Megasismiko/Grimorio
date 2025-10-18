@@ -3,6 +3,7 @@ using Grimorio.BLL.Servicios.Contrato;
 using Grimorio.DAL.Repositorios.Contrato;
 using Grimorio.DTO;
 using Grimorio.Model;
+using Grimorio.Utility;
 using Microsoft.EntityFrameworkCore;
 
 namespace Grimorio.BLL.Servicios
@@ -42,41 +43,77 @@ namespace Grimorio.BLL.Servicios
 
         public async Task<SetDTO> Crear(SetDTO dto)
         {
-            var entity = _mapper.Map<Set>(dto);
-            var creado = await _setRepository.Crear(entity);
+            // Validaciones básicas
+            if (dto is null) throw new ValidationException("Los datos del set son obligatorios.");
+            if (string.IsNullOrWhiteSpace(dto.Codigo)) throw new ValidationException("El código es obligatorio.");
 
+            // Normalización
+            var codigo = dto.Codigo.Trim().ToUpperInvariant();
+
+            // Reglas de formato (ajusta a tus límites reales)
+            if (codigo.Length > 5) throw new ValidationException("El código no puede superar 5 caracteres.");
+
+            // Único por código
+            var existe = await _setRepository.Obtener(s => s.Codigo.ToUpper() == codigo);
+            if (existe is not null)
+                throw new ConflictException($"Ya existe un Set con el código '{dto.Codigo}'.");
+
+            // Mapear y persistir
+            var entity = _mapper.Map<Set>(dto);
+            entity.Codigo = codigo;
+
+            var creado = await _setRepository.Crear(entity);
             if (creado is null || creado.IdSet == 0)
-                throw new TaskCanceledException("No fue posible crear el set.");
+                throw new Exception("No fue posible crear el set.");
 
             return _mapper.Map<SetDTO>(creado);
         }
 
         public async Task<bool> Editar(SetDTO dto)
         {
+            if (dto is null) throw new ValidationException("Los datos del set son obligatorios.");
+            if (dto.IdSet <= 0) throw new ValidationException("El Id del set es inválido.");
+
             var existente = await _setRepository.Obtener(s => s.IdSet == dto.IdSet);
+            if (existente is null) throw new NotFoundException("El set no existe.");
 
-            if (existente is null)
-                throw new TaskCanceledException("El set no existe.");
+            // Validar y normalizar código (si viene)
+            if (!string.IsNullOrWhiteSpace(dto.Codigo))
+            {
+                var nuevoCodigo = dto.Codigo.Trim().ToUpperInvariant();
+                if (nuevoCodigo.Length > 5) throw new ValidationException("El código no puede superar 5 caracteres.");
 
+                // Único por código excluyendo el propio
+                var duplicado = await _setRepository.Obtener(s => s.Codigo.ToUpper() == nuevoCodigo && s.IdSet != dto.IdSet);
+                if (duplicado is not null)
+                    throw new ConflictException($"Ya existe un Set con el código '{dto.Codigo}'.");
+
+                dto.Codigo = nuevoCodigo;
+            }
+
+            // Mapear sobre la entidad cargada
             _mapper.Map(dto, existente);
 
-            var result = await _setRepository.Editar(existente);
-            if (!result)
-                throw new TaskCanceledException("Error al editar el set.");
+            var ok = await _setRepository.Editar(existente);
+            if (!ok) throw new Exception("Error al editar el set.");
 
-            return true;
+            return ok;
         }
 
         public async Task<bool> Eliminar(int id)
         {
             var set = await _setRepository.Obtener(s => s.IdSet == id);
+            if (set is null) throw new NotFoundException("El set no existe.");
 
-            if (set is null)
-                throw new TaskCanceledException("El set no existe.");
-
-            var result = await _setRepository.Eliminar(set);
-            if (!result)
-                throw new TaskCanceledException("Error al eliminar el set.");
+            try
+            {
+                var ok = await _setRepository.Eliminar(set);
+                if (!ok) throw new Exception("Error al eliminar el set.");
+            }
+            catch (DbUpdateException ex)
+            {              
+                throw new ConflictException("No se puede eliminar el set por dependencias asociadas.", ex);
+            }
 
             return true;
         }

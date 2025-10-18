@@ -33,13 +33,13 @@ namespace Grimorio.BLL.Servicios
             }
         }
 
-        public async Task<SesionDTO> ValidarCredenciales(string correo, string clave)
+        public async Task<SesionDTO> Login(LoginDTO login)
         {
             try
             {
                 var query = await _usuarioRepository.Consultar(usuario =>
-                    usuario.Correo.ToLower() == correo.ToLower()
-                    && usuario.Clave == clave
+                    usuario.Correo.ToLower() == login.Correo.ToLower()
+                    && usuario.Clave == login.Clave
                 );
 
                 if (!query.Any()) throw new TaskCanceledException("El usurio no existe");

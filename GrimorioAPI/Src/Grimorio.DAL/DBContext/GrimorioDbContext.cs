@@ -42,56 +42,29 @@ namespace Grimorio.DAL.DBContext;
         modelBuilder.Entity<Carta>(entity =>
         {
             entity.HasKey(e => e.IdCarta).HasName("PK__Cartas__6C9FD04FF6B0DF4B");
-
-            entity.Property(e => e.Artista)
-                .HasMaxLength(100)
-                .IsUnicode(false);
-            entity.Property(e => e.Coste)
-                .HasMaxLength(20)
-                .IsUnicode(false);
+            entity.Property(e => e.Artista).HasMaxLength(100).IsUnicode(false);
+            entity.Property(e => e.Coste).HasMaxLength(20).IsUnicode(false);
             entity.Property(e => e.EsActivo).HasDefaultValue(true);
-            entity.Property(e => e.FechaRegistro)
-                .HasDefaultValueSql("(getdate())")
-                .HasColumnType("datetime");
-            entity.Property(e => e.ImagenUrl)
-                .HasMaxLength(500)
-                .IsUnicode(false);
-            entity.Property(e => e.Nombre)
-                .HasMaxLength(100)
-                .IsUnicode(false);
-            entity.Property(e => e.Numero)
-                .HasMaxLength(10)
-                .IsUnicode(false);
-            entity.Property(e => e.Poder)
-                .HasMaxLength(5)
-                .IsUnicode(false);
+            entity.Property(e => e.FechaRegistro).HasDefaultValueSql("(getdate())").HasColumnType("datetime");
+            entity.Property(e => e.ImagenUrl).HasMaxLength(500).IsUnicode(false);
+            entity.Property(e => e.Nombre).HasMaxLength(100).IsUnicode(false);
+            entity.Property(e => e.Numero).HasMaxLength(10).IsUnicode(false);
+            entity.Property(e => e.Poder).HasMaxLength(5).IsUnicode(false);
             entity.Property(e => e.Precio).HasColumnType("decimal(10, 2)");
-            entity.Property(e => e.Rareza)
-                .HasMaxLength(50)
-                .IsUnicode(false);
-            entity.Property(e => e.Resistencia)
-                .HasMaxLength(5)
-                .IsUnicode(false);
+            entity.Property(e => e.Rareza).HasMaxLength(50).IsUnicode(false);
+            entity.Property(e => e.Resistencia).HasMaxLength(5).IsUnicode(false);
             entity.Property(e => e.Texto).IsUnicode(false);
-            entity.Property(e => e.Tipo)
-                .HasMaxLength(100)
-                .IsUnicode(false);
-            entity.HasOne(d => d.IdSetNavigation).WithMany(p => p.Cartas)
-                .HasForeignKey(d => d.IdSet)
-                .HasConstraintName("FK__Cartas__IdSet__48CFD27E");
+            entity.Property(e => e.Tipo).HasMaxLength(100).IsUnicode(false);           
         });
 
         modelBuilder.Entity<DetalleVenta>(entity =>
         {
             entity.HasKey(e => e.IdDetalleVenta).HasName("PK__DetalleV__AAA5CEC2939D3A95");
-
             entity.Property(e => e.Precio).HasColumnType("decimal(10, 2)");
             entity.Property(e => e.Total).HasColumnType("decimal(10, 2)");
-
             entity.HasOne(d => d.IdCartaNavigation).WithMany(p => p.DetalleVenta)
                 .HasForeignKey(d => d.IdCarta)
                 .HasConstraintName("FK__DetalleVe__IdCar__5441852A");
-
             entity.HasOne(d => d.IdVentaNavigation).WithMany(p => p.DetalleVenta)
                 .HasForeignKey(d => d.IdVenta)
                 .HasConstraintName("FK__DetalleVe__IdVen__534D60F1");
@@ -158,27 +131,23 @@ namespace Grimorio.DAL.DBContext;
         {
             entity.HasKey(e => e.IdSet).HasName("PK__Sets__2B0426383A027871");
 
-            entity.Property(e => e.Codigo)
-                .HasMaxLength(5)
-                .IsUnicode(false);
-            entity.Property(e => e.Color)
-               .HasMaxLength(7)
-               .IsUnicode(false)
-               .HasDefaultValueSql("#C2A878");
+            entity.Property(e => e.Codigo).HasMaxLength(5).IsUnicode(false);
+            entity.HasIndex(e => e.Codigo).IsUnique(); // opcional recomendado
+
+            entity.Property(e => e.Color).HasMaxLength(7).IsUnicode(false).HasDefaultValue("#C2A878");
             entity.Property(e => e.EsActivo).HasDefaultValue(true);
-            entity.Property(e => e.FechaRegistro)
-                .HasDefaultValueSql("(getdate())")
-                .HasColumnType("datetime");
+            entity.Property(e => e.FechaRegistro).HasDefaultValueSql("(getdate())").HasColumnType("datetime");
             entity.Property(e => e.FechaSalida).HasColumnType("datetime");
-            entity.Property(e => e.Logo)
-                .HasMaxLength(500)
-                .IsUnicode(false);
-            entity.Property(e => e.Nombre)
-                .HasMaxLength(50)
-                .IsUnicode(false);
-            entity.Property(e => e.Tipo)
-                .HasMaxLength(100)
-                .IsUnicode(false);
+            entity.Property(e => e.Logo).HasMaxLength(500).IsUnicode(false);
+            entity.Property(e => e.Nombre).HasMaxLength(50).IsUnicode(false);
+            entity.Property(e => e.Tipo).HasMaxLength(100).IsUnicode(false);
+
+            
+            entity.HasMany(s => s.Cartas)
+                  .WithOne(c => c.IdSetNavigation)
+                  .HasForeignKey(c => c.IdSet)
+                  .IsRequired()                    
+                  .OnDelete(DeleteBehavior.Cascade);
         });
 
         modelBuilder.Entity<Usuario>(entity =>

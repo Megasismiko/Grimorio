@@ -11,7 +11,7 @@
 		</div>
 
 		<!-- Acciones -->
-		<div class="actions">
+		<div class="filters">
 
 			<!-- Filtro -->
 			<mat-form-field appearance="outline" class="filter" subscriptSizing="dynamic">
@@ -25,16 +25,19 @@
 			<!-- Botón crear -->
 			<button mat-flat-button color="primary" (click)="Crear()">
 				<mat-icon>add</mat-icon>
-				Crear Set
+				Nuevo
 			</button>
 		</div>
 	</div>
 
 
 	<!-- Loading -->
-	<div class="loading" *ngIf="isLoading">
+	@if(isLoading){
+	<div class="loading">
 		<mat-progress-spinner mode="indeterminate" diameter="40"></mat-progress-spinner>
 	</div>
+	}
+
 
 	<!-- Grid de cards (4 por fila desktop, responsive) -->
 	<div class="cards-grid" *ngIf="!isLoading">
@@ -53,12 +56,11 @@
 
 			<mat-card-content>
 				<mat-chip-set>
-					<mat-chip [highlighted]="s.esActivo" [color]="s.esActivo ? 'primary' : undefined">
-						{{ s.esActivo ? 'Activo' : 'Inactivo' }}
-					</mat-chip>
+
 					<mat-chip>Id: {{ s.idSet }}</mat-chip>
 					<mat-chip>Código: {{ s.codigo }}</mat-chip>
 					<mat-chip>Cartas: {{ s.numCartas }}</mat-chip>
+					<app-chip-es-activo [esActivo]="s.esActivo"></app-chip-es-activo>
 				</mat-chip-set>
 			</mat-card-content>
 

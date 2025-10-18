@@ -4,13 +4,15 @@ import { SetsService } from '../../../../services/sets.service';
 import { Set } from '../../../../interfaces/set';
 import { Carta } from '../../../../interfaces/carta';
 import { SHARED_IMPORTS } from '../../../../reutilizable/shared.imports';
+import { CabeceraSetComponent } from '../../../reutilizable/cabecera-set/cabecera-set';
 
 @Component({
 	selector: 'app-cartas',
 	standalone: true,
 	imports: [
 		...SHARED_IMPORTS,
-		RouterModule
+		RouterModule,
+		CabeceraSetComponent
 	],
 	templateUrl: './cartas.html',
 	styleUrls: ['./cartas.css'],
@@ -23,7 +25,7 @@ export class CartasComponent implements OnInit {
 
 	// estado
 	loading = signal<boolean>(true);
-	set = signal<Set | null>(null);
+	setSignal = signal<Set | null>(null);
 
 	// filtros (signals)
 	searchTerm = signal<string>('');
@@ -31,7 +33,7 @@ export class CartasComponent implements OnInit {
 
 	// cartas filtradas
 	filteredCartas = computed<Carta[]>(() => {
-		const s = this.set();
+		const s = this.setSignal();
 		if (!s?.cartas) return [];
 		const term = this.searchTerm().trim().toLowerCase();
 		const rareza = this.rareza();
@@ -68,10 +70,10 @@ export class CartasComponent implements OnInit {
 		this.setsService.GetSetById(this.idSet).subscribe({
 			next: (res) => {
 				if (res?.status) {
-					this.set.set(res.value as Set);
+					this.setSignal.set(res.value as Set);
 				} else {
 					console.error('Error al cargar el set');
-					this.set.set(null);
+					this.setSignal.set(null);
 				}
 				this.loading.set(false);
 			},

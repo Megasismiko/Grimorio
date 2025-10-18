@@ -10,6 +10,7 @@ import { ModalSet } from '../../modals/modal-set/modal-set';
 import { MatDialog } from '@angular/material/dialog';
 import Swal from 'sweetalert2';
 import { UtilidadService } from '../../../../reutilizable/utilidad.service';
+import { ChipEsActivoComponent } from '../../../reutilizable/chip-es-activo/chip-es-activo';
 
 @Component({
 	standalone: true,
@@ -17,7 +18,8 @@ import { UtilidadService } from '../../../../reutilizable/utilidad.service';
 	imports: [
 		...SHARED_IMPORTS,
 		RouterModule,
-		MatProgressSpinnerModule
+		MatProgressSpinnerModule,
+		ChipEsActivoComponent
 	],
 	templateUrl: './sets.html',
 	styleUrl: './sets.css'
