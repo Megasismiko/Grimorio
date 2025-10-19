@@ -31,4 +31,12 @@ export type ScryfallCard = {
 	image_uris?: { small?: string; normal?: string; art_crop?: string };
 	type_line?: string;
 	mana_cost?: string;
-};
+	prices?: {
+		eur?: string,
+		eur_foil?: string,
+		tix?: string,
+		usd?: string,
+		usd_etched?: string,
+		usd_foil?: string
+	}
+}

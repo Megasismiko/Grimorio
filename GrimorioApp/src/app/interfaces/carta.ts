@@ -4,7 +4,7 @@ export interface Carta {
 	idSet: number,
 	descripcionSet: string,
 	stock: number,
-	precio: string,
+	precio: number,
 	esActivo: boolean,
 	coste: string,
 	tipo: string,

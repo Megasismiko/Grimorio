@@ -30,7 +30,6 @@ export class CatalogoService {
 		);
 	}
 
-
 	public GetCartasSet(codigo: string): Observable<Carta[]> {
 		const url = `${this.api}cards/search?order=set&unique=prints&q=e:${encodeURIComponent(codigo)}`;
 		return this.http.get<ScryfallListResponse<ScryfallCard>>(url).pipe(

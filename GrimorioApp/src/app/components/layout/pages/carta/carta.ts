@@ -127,11 +127,10 @@ export class CartaComponent implements OnInit {
 		this.cartasService.GetCartaById(id).subscribe({
 			next: (res) => {
 				if (res?.status && res.value) {
-					// adapta los nombres si tu API devuelve strings/formatos distintos
 					const c = res.value;
 					this.form.patchValue({
 						nombre: c.nombre,
-						precio: Number((c.precio ?? '').toString().replace(',', '.')) || null,
+						precio: c.precio || 0,
 						stock: c.stock ?? 0,
 						tipo: c.tipo ?? '',
 						rareza: c.rareza ?? '',
@@ -169,7 +168,7 @@ export class CartaComponent implements OnInit {
 			idSet: this.idSet,
 			descripcionSet: '',
 			nombre: this.form.value.nombre ?? '',
-			precio: (this.form.value.precio ?? '0').toString(),
+			precio: (this.form.value.precio ?? 0),
 			stock: this.form.value.stock ?? 0,
 			tipo: this.form.value.tipo ?? '',
 			rareza: this.form.value.rareza ?? '',

@@ -23,7 +23,7 @@ export class ModalCatalogoSets implements AfterViewInit {
 	private catalogoService = inject(CatalogoService);
 
 	filtro = '';
-	// columnas adaptadas a tu interfaz Set
+
 	displayedColumns: string[] = ['select', 'logo', 'codigo', 'nombre', 'fechaSalida', 'numCartas'];
 	dataSource = new MatTableDataSource<Set>([]);
 	selection = new SelectionModel<Set>(true, []);

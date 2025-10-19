@@ -22,7 +22,7 @@ export const mapCardFromScryfall = (c: ScryfallCard): Carta => ({
 	idSet: 0,
 	descripcionSet: '',
 	nombre: c.name || '',
-	precio: '0',
+	precio: parseFloat(c.prices?.eur || c.prices?.eur_foil || c.prices?.usd || c.prices?.usd || c.prices?.usd_foil || c.prices?.usd_etched || c.prices?.tix || '0'),
 	stock: 0,
 	tipo: c.type_line || '',
 	rareza: c.rarity || '',

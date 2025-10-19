@@ -1,0 +1,35 @@
+<h2 mat-dialog-title class="dlg-title">
+	<mat-icon>sync</mat-icon>
+	Importando sets y cartas…
+</h2>
+
+<mat-dialog-content class="dlg-content">
+	<!-- Progreso global -->
+	<div class="block">
+		<div class="row">
+			<div>Progreso total</div>
+			<div>{{ completedSets() }} / {{ totalSets }} sets</div>
+		</div>
+		<mat-progress-bar mode="determinate" [value]="overallProgress()"></mat-progress-bar>
+	</div>
+
+	<!-- Progreso del set actual -->
+	<div class="block">
+		<div class="row">
+			<div>Set actual: <b>{{ currentSetNombre() }}</b> <span class="mono">[{{ currentSetCodigo() }}]</span></div>
+			<div>{{ currentSetProgress() }}%</div>
+		</div>
+		<mat-progress-bar mode="determinate" [value]="currentSetProgress()"></mat-progress-bar>
+	</div>
+
+	<!-- Logs -->
+	<!-- Logs -->
+	<div class="log" #logBox>
+		<div *ngFor="let l of logs()">{{ l }}</div>
+	</div>
+
+</mat-dialog-content>
+
+<mat-dialog-actions align="end" class="dlg-actions">
+	<button mat-flat-button color="primary" (click)="cerrar()" [disabled]="isRunning()">Cerrar</button>
+</mat-dialog-actions>

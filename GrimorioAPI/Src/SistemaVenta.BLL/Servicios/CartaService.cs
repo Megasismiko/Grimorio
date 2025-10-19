@@ -37,46 +37,50 @@ namespace Grimorio.BLL.Servicios
 
         public async Task<CartaDTO> Crear(CartaDTO dto)
         {
-            // Validaciones básicas
             if (dto is null) throw new ValidationException("Los datos de la carta son obligatorios.");
             if (dto.IdSet <= 0) throw new ValidationException("El Id del set es obligatorio.");
             if (string.IsNullOrWhiteSpace(dto.Nombre)) throw new ValidationException("El nombre es obligatorio.");
             if (dto.Stock is < 0) throw new ValidationException("El stock no puede ser negativo.");
-           
-         
-            //  Validar FK Set existente (mejor mensaje que el error de BD)
+            if (string.IsNullOrWhiteSpace(dto.Numero))
+                throw new ValidationException("El número de colección es obligatorio para distinguir impresiones.");
+
+            // Validar FK Set
             var set = await _setRepository.Obtener(s => s.IdSet == dto.IdSet);
             if (set is null) throw new NotFoundException("El set asociado no existe.");
 
-            // Normalizaciones simples
+            // Normalizaciones
             dto.Nombre = dto.Nombre.Trim();
             dto.Rareza = dto.Rareza?.Trim();
             dto.Tipo = dto.Tipo?.Trim();
             dto.ImagenUrl = dto.ImagenUrl?.Trim();
+            var numeroKey = dto.Numero.Trim().ToUpperInvariant();
 
-            // Regla de unicidad (ejemplo): Nombre único por Set
+            // Unicidad por (IdSet, Numero)
             var duplicado = await _cartaRepository.Obtener(c =>
                 c.IdSet == dto.IdSet &&
-                c.Nombre.ToUpper() == dto.Nombre.ToUpper());
+                c.Numero.ToUpper() == numeroKey);
+
             if (duplicado is not null)
-                throw new ConflictException($"Ya existe una carta llamada '{dto.Nombre}' en este set.");
+                throw new ConflictException($"Ya existe la carta con número '{dto.Numero}' en este set.");
 
             // Crear
             var carta = _mapper.Map<Carta>(dto);
-            var cartaCreada = await _cartaRepository.Crear(carta);
+            carta.Numero = numeroKey; // guarda normalizado
 
+            var cartaCreada = await _cartaRepository.Crear(carta);
             if (cartaCreada is null || cartaCreada.IdCarta == 0)
                 throw new Exception("No fue posible crear la carta.");
 
             return _mapper.Map<CartaDTO>(cartaCreada);
         }
 
+
         public async Task<bool> CrearLote(List<CartaDTO> cartas)
         {
             if (cartas is null || cartas.Count == 0)
                 throw new ValidationException("Debes enviar al menos una carta.");
 
-            // 1) Normalizar y validar mínimos
+            // 1) Normalizar datos base
             var normalizadas = cartas
                 .Where(c => c is not null)
                 .Select(c => new
@@ -84,7 +88,8 @@ namespace Grimorio.BLL.Servicios
                     Dto = c,
                     IdSet = c.IdSet,
                     Nombre = (c.Nombre ?? string.Empty).Trim(),
-                    NombreKey = (c.Nombre ?? string.Empty).Trim().ToUpperInvariant(),
+                    Numero = (c.Numero ?? string.Empty).Trim(),
+                    NumeroKey = (c.Numero ?? string.Empty).Trim().ToUpperInvariant(),
                     Rareza = c.Rareza?.Trim(),
                     Tipo = c.Tipo?.Trim(),
                     ImagenUrl = c.ImagenUrl?.Trim(),
@@ -92,20 +97,19 @@ namespace Grimorio.BLL.Servicios
                 })
                 .ToList();
 
-            // 2) Verificar que todo el lote pertenece al MISMO set
+            // 2) Verificar que todo el lote va al MISMO set (>0)
             var distinctSetIds = normalizadas.Select(x => x.IdSet).Where(id => id > 0).Distinct().ToList();
             if (distinctSetIds.Count != 1)
                 throw new ValidationException("Todas las cartas del lote deben pertenecer al mismo Set.");
             var setId = distinctSetIds[0];
-            if (setId <= 0)
-                throw new ValidationException("El Id del set es obligatorio y debe ser mayor que 0.");
 
-            // 3) Validaciones de cada carta
+            // 3) Validaciones por carta
             var errores = new List<string>();
             foreach (var x in normalizadas)
             {
                 if (x.IdSet != setId) errores.Add($"Carta con IdSet inconsistente (Nombre='{x.Nombre}').");
                 if (string.IsNullOrWhiteSpace(x.Nombre)) errores.Add("Carta sin Nombre.");
+                if (string.IsNullOrWhiteSpace(x.Numero)) errores.Add($"Carta '{x.Nombre}' sin número de colección.");
                 if (x.Stock is < 0) errores.Add($"Stock negativo en carta '{x.Nombre}'.");
             }
             if (errores.Count > 0)
@@ -116,29 +120,30 @@ namespace Grimorio.BLL.Servicios
             if (set is null)
                 throw new NotFoundException($"El Set {setId} no existe.");
 
-            // 5) De-dup en memoria por Nombre (case-insensitive) dentro del lote
+            // 5) De-dup en memoria por Numero (case-insensitive) dentro del lote
             var unicos = normalizadas
-                .GroupBy(x => x.NombreKey)
+                .GroupBy(x => x.NumeroKey)
                 .Select(g => g.First())
                 .ToList();
 
-            // 6) Traer nombres existentes SOLO de ese Set (una consulta)
+            // 6) Traer existentes SOLO de ese Set y construir HashSet de numeros
             var existentes = await _cartaRepository.Consultar(c => c.IdSet == setId);
-            var nombresExistentes = existentes
-                .Select(c => (c.Nombre ?? string.Empty).Trim().ToUpperInvariant())
+            var numerosExistentes = existentes
+                .Select(c => (c.Numero ?? string.Empty).Trim().ToUpperInvariant())
                 .ToHashSet();
 
-            // 7) Filtrar candidatas (no existentes en BD) y mapear entidades
+            // 7) Filtrar candidatas (no existentes por (IdSet, Numero)) y mapear entidades
             var candidatas = unicos
-                .Where(x => !nombresExistentes.Contains(x.NombreKey))
+                .Where(x => !numerosExistentes.Contains(x.NumeroKey))
                 .Select(x =>
                 {
                     var dto = x.Dto;
-                    dto.IdSet = setId;         // asegurar setId unificado
+                    dto.IdSet = setId;         // asegurar IdSet unificado
                     dto.Nombre = x.Nombre;     // normalizaciones aplicadas
                     dto.Rareza = x.Rareza;
                     dto.Tipo = x.Tipo;
                     dto.ImagenUrl = x.ImagenUrl;
+                    dto.Numero = x.NumeroKey;  // guardar normalizado (mayúsculas)
                     return _mapper.Map<Carta>(dto);
                 })
                 .ToList();
@@ -146,7 +151,7 @@ namespace Grimorio.BLL.Servicios
             if (candidatas.Count == 0)
                 return true; // nada que crear (idempotente)
 
-            // 8) Crear una a una con el repositorio
+            // 8) Crear una a una
             var creadas = 0;
             foreach (var entity in candidatas)
             {

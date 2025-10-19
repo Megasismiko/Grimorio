@@ -10,7 +10,7 @@
 
         public int? Stock { get; set; }
 
-        public string? Precio { get; set; }
+        public decimal? Precio { get; set; }
 
         public bool? EsActivo { get; set; }
 

@@ -49,9 +49,6 @@ namespace Grimorio.Utility
                 .ForMember(
                     destino => destino.DescripcionSet,
                     opt => opt.MapFrom(origen => origen.IdSetNavigation.Nombre)
-                ).ForMember(
-                    destino => destino.Precio,
-                    opt => opt.MapFrom(origen => Convert.ToString(origen.Precio.Value, Culture.Current))
                 );
 
 
@@ -59,9 +56,6 @@ namespace Grimorio.Utility
                .ForMember(
                    destino => destino.IdSetNavigation,
                    opt => opt.Ignore()
-               ).ForMember(
-                   destino => destino.Precio,
-                   opt => opt.MapFrom(origen => Convert.ToDecimal(origen.Precio, Culture.Current))
                );
             #endregion
 

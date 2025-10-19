@@ -12,6 +12,8 @@ import Swal from 'sweetalert2';
 import { UtilidadService } from '../../../../reutilizable/utilidad.service';
 import { ChipEsActivoComponent } from '../../../reutilizable/chip-es-activo/chip-es-activo';
 import { ModalCatalogoSets } from '../../modals/modal-catalogo-sets/modal-catalogo-sets';
+import { ModalProgresoImportacion } from '../../modals/modal-progreso-importacion/modal-progreso-importacion';
+import { Subject } from 'rxjs';
 
 
 
@@ -133,20 +135,24 @@ export class SetsComponent implements OnInit {
 			width: '90vw',
 			maxWidth: '1200px',
 			height: 'auto'
-		}).afterClosed().subscribe((sets: Set[]) => {
-			if (sets) {
-				this.setsService.CrearLote(sets).subscribe({
-					next: ok => {
-						if (ok) {
-							this.Obtener();
-						}
-					},
-					error: err => {
-						console.error(err);
-					}
-				});
-			}
+		}).afterClosed().subscribe((setsSeleccionados: Set[]) => {
+			if (!setsSeleccionados?.length) return;
+
+			const onSetProcessed$ = new Subject<void>();
+
+			onSetProcessed$.subscribe(() => {
+				this.Obtener();
+			});
+
+			this.dialog.open(ModalProgresoImportacion, {
+				disableClose: true,
+				width: '800px',
+				maxWidth: '95vw',
+				data: {
+					sets: setsSeleccionados,
+					onSetProcessed: onSetProcessed$
+				}
+			});
 		});
 	}
-
 }

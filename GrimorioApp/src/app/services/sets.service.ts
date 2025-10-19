@@ -27,11 +27,7 @@ export class SetsService {
 	}
 
 	public Crear(data: Set): Observable<ResponseApi> {
-		return this._http.post<ResponseApi>(`${this.url}crear`, data);
-	}
-
-	public CrearLote(data: Set[]): Observable<ResponseApi> {
-		return this._http.post<ResponseApi>(`${this.url}crear/lote`, data);
+		return this._http.post<ResponseApi>(`${this.url}crear`, data);		
 	}
 
 	public Editar(data: Set): Observable<ResponseApi> {
