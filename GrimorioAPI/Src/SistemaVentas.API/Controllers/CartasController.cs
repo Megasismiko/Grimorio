@@ -55,6 +55,25 @@ namespace Grimorio.API.Controllers
             return Ok(res);
         }
 
+        [HttpPost]
+        [Route("crear/lote")]
+        public async Task<IActionResult> CrearLote([FromBody] List<CartaDTO> cartas)
+        {
+            Response<bool> res = new();
+
+            try
+            {
+                res.value = await _cartaService.CrearLote(cartas);
+            }
+            catch (Exception ex)
+            {
+                res.status = false;
+                res.msg = ex.Message;
+            }
+
+            return Ok(res);
+        }
+
         [HttpPut]
         [Route("editar")]
         public async Task<IActionResult> Editar([FromBody] CartaDTO carta)

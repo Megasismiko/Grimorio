@@ -131,7 +131,7 @@ namespace Grimorio.DAL.DBContext;
         {
             entity.HasKey(e => e.IdSet).HasName("PK__Sets__2B0426383A027871");
 
-            entity.Property(e => e.Codigo).HasMaxLength(5).IsUnicode(false);
+            entity.Property(e => e.Codigo).HasMaxLength(6).IsUnicode(false);
             entity.HasIndex(e => e.Codigo).IsUnique(); // opcional recomendado
 
             entity.Property(e => e.Color).HasMaxLength(7).IsUnicode(false).HasDefaultValue("#C2A878");

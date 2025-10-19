@@ -9,6 +9,7 @@ import { Carta } from '../interfaces/carta';
 	providedIn: 'root'
 })
 export class CartasService {
+
 	private url: string = `${enviroment.endpoint}cartas/`;
 
 	constructor(
@@ -22,6 +23,10 @@ export class CartasService {
 
 	public Crear(data: Carta): Observable<ResponseApi> {
 		return this._http.post<ResponseApi>(`${this.url}crear`, data);
+	}
+
+	public CrearLote(data: Carta[]): Observable<ResponseApi> {
+		return this._http.post<ResponseApi>(`${this.url}crear/lote`, data);
 	}
 
 	public Editar(data: Carta): Observable<ResponseApi> {

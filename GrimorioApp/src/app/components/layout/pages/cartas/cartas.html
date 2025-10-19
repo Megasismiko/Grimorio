@@ -27,9 +27,9 @@
 		</mat-select>
 	</mat-form-field>
 
-	<button mat-flat-button color="primary">
+	<button mat-flat-button color="primary" (click)="Catalogo()">
 		<mat-icon>add</mat-icon>
-		Importar
+		Importar desde catalogo
 	</button>
 
 	<button mat-flat-button color="primary" [routerLink]="['/pages/set', idSet, 'carta','nueva']">

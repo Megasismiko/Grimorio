@@ -17,10 +17,7 @@ import { LoginRedirectGuard } from './guards/login-redirect.guard';
 
 export const routes: Routes = [
 	{ path: '', redirectTo: 'login', pathMatch: 'full' },
-
-	// Evita mostrar login si ya estás logueado
 	{ path: 'login', component: LoginComponent, canActivate: [LoginRedirectGuard] },
-
 	{
 		path: 'pages',
 		component: LayoutComponent,

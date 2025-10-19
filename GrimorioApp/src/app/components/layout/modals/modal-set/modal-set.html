@@ -40,7 +40,7 @@
 	<mat-form-field appearance="outline">
 		<mat-label>Color</mat-label>
 		<mat-select formControlName="color">
-			<mat-option *ngFor="let c of COLORES" [value]="c.color">
+			<mat-option *ngFor="let c of COLORES_SET" [value]="c.color">
 				<span class="swatch" [style.backgroundColor]="c.color"></span>
 				{{ c.descripcion }}
 			</mat-option>

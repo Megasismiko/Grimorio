@@ -11,6 +11,9 @@ import { MatDialog } from '@angular/material/dialog';
 import Swal from 'sweetalert2';
 import { UtilidadService } from '../../../../reutilizable/utilidad.service';
 import { ChipEsActivoComponent } from '../../../reutilizable/chip-es-activo/chip-es-activo';
+import { ModalCatalogoSets } from '../../modals/modal-catalogo-sets/modal-catalogo-sets';
+
+
 
 @Component({
 	standalone: true,
@@ -122,6 +125,28 @@ export class SetsComponent implements OnInit {
 				})
 			}
 		})
+	}
+
+	public Catalogo() {
+		this.dialog.open(ModalCatalogoSets, {
+			disableClose: true,
+			width: '90vw',
+			maxWidth: '1200px',
+			height: 'auto'
+		}).afterClosed().subscribe((sets: Set[]) => {
+			if (sets) {
+				this.setsService.CrearLote(sets).subscribe({
+					next: ok => {
+						if (ok) {
+							this.Obtener();
+						}
+					},
+					error: err => {
+						console.error(err);
+					}
+				});
+			}
+		});
 	}
 
 }

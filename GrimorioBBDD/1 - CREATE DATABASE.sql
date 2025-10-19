@@ -60,11 +60,14 @@ CREATE TABLE Cartas (
     Poder VARCHAR(5),
     Resistencia VARCHAR(5),
     ImagenUrl VARCHAR(500),
-    IdSet INT REFERENCES Sets(IdSet),
-	Stock INT,
-	Precio Decimal(10,2),
+    IdSet INT NOT NULL,
+    Stock INT,
+    Precio DECIMAL(10,2),
     EsActivo BIT DEFAULT 1,
-    FechaRegistro DATETIME DEFAULT GETDATE()
+    FechaRegistro DATETIME DEFAULT GETDATE(),
+    CONSTRAINT FK_Cartas_Sets
+        FOREIGN KEY (IdSet) REFERENCES dbo.Sets(IdSet)
+        ON DELETE CASCADE
 );
 GO
 

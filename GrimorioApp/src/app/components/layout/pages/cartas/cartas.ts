@@ -1,10 +1,15 @@
-import { Component, OnInit, inject, computed, signal } from '@angular/core';
+import { Component, OnInit, inject, computed, signal, Inject } from '@angular/core';
 import { ActivatedRoute, RouterModule } from '@angular/router';
 import { SetsService } from '../../../../services/sets.service';
 import { Set } from '../../../../interfaces/set';
 import { Carta } from '../../../../interfaces/carta';
 import { SHARED_IMPORTS } from '../../../../reutilizable/shared.imports';
 import { CabeceraSetComponent } from '../../../reutilizable/cabecera-set/cabecera-set';
+import { CatalogoService } from '../../../../services/catalogo/catalogo.service';
+import { CartasService } from '../../../../services/cartas.service';
+import { ModalCatalogoCartasSet } from '../../modals/modal-catalogo-cartas-set/modal-catalogo-cartas-set';
+import { MatDialog } from '@angular/material/dialog';
+
 
 @Component({
 	selector: 'app-cartas',
@@ -20,7 +25,8 @@ import { CabeceraSetComponent } from '../../../reutilizable/cabecera-set/cabecer
 export class CartasComponent implements OnInit {
 	private route = inject(ActivatedRoute);
 	private setsService = inject(SetsService);
-
+	private cartasService = inject(CartasService);
+	private dialog = inject(MatDialog);
 	idSet = 0;
 
 	// estado
@@ -61,11 +67,10 @@ export class CartasComponent implements OnInit {
 			this.loading.set(false);
 			return;
 		}
-
-		this.loadSet();
+		this.Obtener();
 	}
 
-	private loadSet() {
+	private Obtener() {
 		this.loading.set(true);
 		this.setsService.GetSetById(this.idSet).subscribe({
 			next: (res) => {
@@ -86,4 +91,38 @@ export class CartasComponent implements OnInit {
 
 	// util para *ngFor
 	trackByCarta = (_: number, c: Carta) => c.idCarta;
+
+
+	public Catalogo() {
+		const set = this.setSignal();
+		if (set) {
+			this.dialog.open(ModalCatalogoCartasSet, {
+				disableClose: true,
+				width: '90vw',
+				maxWidth: '1200px',
+				height: 'auto',
+				data: {
+					codigo: set.codigo,
+					id: set.idSet,
+					nombre: set.nombre
+				}
+			}).afterClosed().subscribe((cartas: Carta[]) => {
+				if (cartas) {
+					this.cartasService.CrearLote(cartas).subscribe({
+						next: ok => {
+							if (ok) {
+								this.Obtener();
+							}
+						},
+						error: err => {
+							console.error(err);
+						}
+					});
+				}
+			});
+		}
+
+
+	}
 }
+

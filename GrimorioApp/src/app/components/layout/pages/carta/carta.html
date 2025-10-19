@@ -6,8 +6,8 @@
 	<!-- IZQUIERDA: SÓLO PREVIEW -->
 	<div class="col left">
 		<div class="preview sticky">
-			<img [src]="(form.get('imagenUrl')?.value?.trim() || DEFAULT_IMG)" alt="Vista previa" (error)="onImgError()"
-				(load)="onImgLoad()" />
+			<img [src]="(form.get('imagenUrl')?.value?.trim() || DEFAULT_CARD_IMG)" alt="Vista previa"
+				(error)="onImgError()" (load)="onImgLoad()" />
 			@if(imgError()){
 			<div class="img-error">No se pudo cargar la imagen</div>
 			}

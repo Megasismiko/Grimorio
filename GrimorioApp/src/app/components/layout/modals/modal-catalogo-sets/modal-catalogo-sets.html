@@ -1,0 +1,89 @@
+<h2 mat-dialog-title class="dlg-title">
+	<mat-icon aria-hidden="true">collections_bookmark</mat-icon>
+	Catálogo de Sets
+</h2>
+
+<mat-dialog-content class="dlg-content">
+	<div class="filter-row">
+		<mat-form-field appearance="outline" class="filter-field">
+			<mat-label>Filtrar por nombre o código</mat-label>
+			<input matInput [(ngModel)]="filtro" (ngModelChange)="aplicarFiltro($event)"
+				placeholder="Ej: KHM, Kaldheim" />
+			<button mat-icon-button matSuffix aria-label="Borrar filtro" (click)="filtro=''; aplicarFiltro('')">
+				<mat-icon>clear</mat-icon>
+			</button>
+		</mat-form-field>
+	</div>
+
+	<div *ngIf="loading" class="loading-row" role="status" aria-live="polite">
+		<mat-progress-bar mode="indeterminate"></mat-progress-bar>
+		<span class="loading-text">Cargando sets…</span>
+	</div>
+
+	<div class="table-container" [class.disabled]="loading">
+		<table mat-table [dataSource]="dataSource" matSort [trackBy]="trackById" class="mat-elevation-z2">
+
+			<!-- Master checkbox -->
+			<ng-container matColumnDef="select">
+				<th mat-header-cell *matHeaderCellDef>
+					<mat-checkbox (change)="masterToggle()" [checked]="isAllSelected()"
+						[indeterminate]="selection.hasValue() && !isAllSelected()" [aria-label]="checkboxLabel()">
+					</mat-checkbox>
+				</th>
+				<td mat-cell *matCellDef="let row">
+					<mat-checkbox (click)="$event.stopPropagation()" (change)="$event ? selection.toggle(row) : null"
+						[checked]="selection.isSelected(row)" [aria-label]="checkboxLabel(row)">
+					</mat-checkbox>
+				</td>
+			</ng-container>
+
+			<!-- Logo -->
+			<ng-container matColumnDef="logo">
+				<th mat-header-cell *matHeaderCellDef> </th>
+				<td mat-cell *matCellDef="let row">
+					<img [src]="row.logo" alt="logo" class="set-logo" />
+				</td>
+			</ng-container>
+
+			<!-- Código -->
+			<ng-container matColumnDef="codigo">
+				<th mat-header-cell *matHeaderCellDef mat-sort-header> Código </th>
+				<td mat-cell *matCellDef="let row" class="mono strong"> {{ row.codigo }} </td>
+			</ng-container>
+
+			<!-- Nombre -->
+			<ng-container matColumnDef="nombre">
+				<th mat-header-cell *matHeaderCellDef mat-sort-header> Nombre </th>
+				<td mat-cell *matCellDef="let row"> {{ row.nombre }} </td>
+			</ng-container>
+
+			<!-- Fecha salida -->
+			<ng-container matColumnDef="fechaSalida">
+				<th mat-header-cell *matHeaderCellDef mat-sort-header> Publicación </th>
+				<td mat-cell *matCellDef="let row"> {{ row.fechaSalida || '—' }} </td>
+			</ng-container>
+
+			<!-- Nº cartas -->
+			<ng-container matColumnDef="numCartas">
+				<th mat-header-cell *matHeaderCellDef mat-sort-header> Cartas </th>
+				<td mat-cell *matCellDef="let row" class="align-right"> {{ row.numCartas ?? 0 }} </td>
+			</ng-container>
+
+			<tr mat-header-row *matHeaderRowDef="displayedColumns" class="sticky-header"></tr>
+			<tr mat-row *matRowDef="let row; columns: displayedColumns" (click)="selection.toggle(row)"
+				class="selectable-row"></tr>
+		</table>
+	</div>
+
+	<mat-paginator [pageSize]="10" [pageSizeOptions]="[5,10,25,50]" showFirstLastButtons></mat-paginator>
+
+	<div *ngIf="errorMsg" class="error-row">
+		<mat-icon color="warn">error</mat-icon>
+		<span>{{ errorMsg }}</span>
+	</div>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end" class="dlg-actions">
+	<button mat-stroked-button (click)="cancelar()">Cancelar</button>
+	<button mat-flat-button color="primary" (click)="confirmar()">Seleccionar</button>
+</mat-dialog-actions>

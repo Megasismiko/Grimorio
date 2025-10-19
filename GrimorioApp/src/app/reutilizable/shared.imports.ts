@@ -26,6 +26,24 @@ import { MatSort, MatSortModule } from '@angular/material/sort';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatChipsModule } from '@angular/material/chips';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+
+export const DEFAULT_CARD_IMAGE = 'https://gatherer.wizards.com/assets/card_back.webp';
+
+export const DEFAULT_SET_LOGO = 'https://svgs.scryfall.io/sets/one.svg';
+
+export const COLORES_SET = [
+	{ color: '#8B0000', descripcion: 'Granate' },
+	{ color: '#B23A48', descripcion: 'Rojo Oscuro' },
+	{ color: '#C2A878', descripcion: 'Arena Dorada' },
+	{ color: '#D4AF37', descripcion: 'Oro Antiguo' },
+	{ color: '#2F5233', descripcion: 'Verde Bosque' },
+	{ color: '#2E4A7D', descripcion: 'Azul Arcano' },
+	{ color: '#3D2C8D', descripcion: 'Índigo' },
+	{ color: '#4C1A57', descripcion: 'Morado Profundo' },
+	{ color: '#5A5A5A', descripcion: 'Gris Hierro' },
+	{ color: '#1C1C1C', descripcion: 'Carbón Oscuro' }
+];
 
 export const SHARED_IMPORTS = [
 	FormsModule,
@@ -57,6 +75,7 @@ export const SHARED_IMPORTS = [
 	MatSort,
 	MatFormFieldModule,
 	MatSlideToggleModule,
-	MatChipsModule
+	MatChipsModule,
+	MatCheckboxModule
 
 ] as const;

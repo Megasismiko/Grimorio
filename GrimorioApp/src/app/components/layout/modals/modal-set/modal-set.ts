@@ -3,9 +3,11 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { Set } from '../../../../interfaces/set';
 import { UtilidadService } from '../../../../reutilizable/utilidad.service';
-import { SHARED_IMPORTS } from '../../../../reutilizable/shared.imports';
+import { COLORES_SET, DEFAULT_SET_LOGO, SHARED_IMPORTS } from '../../../../reutilizable/shared.imports';
 import { SetsService } from '../../../../services/sets.service';
-import { SET_COLORES as SET_COLORES_CONST } from '../../../../reutilizable/set.colores';
+
+import { CatalogoService } from '../../../../services/catalogo/catalogo.service';
+import { DateUtil } from '../../../../reutilizable/date.util';
 
 @Component({
 	selector: 'app-modal-set',
@@ -16,27 +18,24 @@ import { SET_COLORES as SET_COLORES_CONST } from '../../../../reutilizable/set.c
 })
 export class ModalSet implements OnInit {
 
+	COLORES_SET = COLORES_SET;
 	form: FormGroup;
 	titulo = 'Crear';
-
-	DEFAULT_LOGO = 'https://svgs.scryfall.io/sets/one.svg';
-
-	readonly COLORES = SET_COLORES_CONST;
 
 	constructor(
 		private modal: MatDialogRef<ModalSet>,
 		@Inject(MAT_DIALOG_DATA) public set: Set | null,
 		private fb: FormBuilder,
-		private _setsService: SetsService,
-		private _util: UtilidadService
+		private setsService: SetsService,
+		private utilidadService: UtilidadService
 	) {
 		this.form = this.fb.group({
 			nombre: ['', [Validators.required]],
 			esActivo: [true],
 			codigo: ['', [Validators.required]],
-			logo: [this.DEFAULT_LOGO],
+			logo: [DEFAULT_SET_LOGO],
 			fechaSalida: ['', [Validators.required]],
-			color: [this.COLORES[0].color, [Validators.required]]
+			color: [COLORES_SET[0].color, [Validators.required]]
 		});
 
 		if (this.set) this.titulo = 'Editar';
@@ -48,34 +47,19 @@ export class ModalSet implements OnInit {
 				nombre: this.set.nombre,
 				esActivo: this.set.esActivo,
 				codigo: this.set.codigo,
-				logo: this.set.logo || this.DEFAULT_LOGO,
-				fechaSalida: this.onlyDate(this.set.fechaSalida), // solo 10 chars
+				logo: this.set.logo || DEFAULT_SET_LOGO,
+				fechaSalida: DateUtil.formatDateString(this.set.fechaSalida),
 				color: this.set.color
 			});
 		}
 	}
 
-	// Toma los 10 primeros caracteres y normaliza si viene como yyyy-MM-dd
-	private onlyDate(v?: string): string {
-		if (!v) return '';
-		const raw = v.substring(0, 10);
-		// Si viene como yyyy-MM-dd -> convertir a dd/MM/yyyy
-		const iso = /^(\d{4})-(\d{2})-(\d{2})$/;
-		const dmY = /^(\d{2})\/(\d{2})\/(\d{4})$/;
 
-		if (iso.test(raw)) {
-			const [, y, m, d] = raw.match(iso)!;
-			return `${d}/${m}/${y}`;
-		}
-		if (dmY.test(raw)) return raw;
 
-		// cualquier otra cosa, intentar limpiar: 07/10/2002 de "07/10/2002 0:00:00"
-		return raw.replaceAll('-', '/');
-	}
 
 	onFechaInput(ev: Event) {
 		const input = ev.target as HTMLInputElement;
-		this.form.patchValue({ fechaSalida: this.onlyDate(input.value) }, { emitEvent: false });
+		this.form.patchValue({ fechaSalida: DateUtil.formatDateString(input.value) }, { emitEvent: false });
 	}
 
 	public Guardar() {
@@ -86,23 +70,23 @@ export class ModalSet implements OnInit {
 			nombre: v.nombre,
 			esActivo: v.esActivo,
 			codigo: v.codigo,
-			logo: v.logo || this.DEFAULT_LOGO,
-			fechaSalida: this.onlyDate(v.fechaSalida),
+			logo: v.logo || DEFAULT_SET_LOGO,
+			fechaSalida: DateUtil.formatDateString(v.fechaSalida),
 			color: v.color,
 			cartas: [],
 			numCartas: 0
 		};
 
-		const obs = this.set ? this._setsService.Editar(data) : this._setsService.Crear(data);
+		const obs = this.set ? this.setsService.Editar(data) : this.setsService.Crear(data);
 		const okMsg = this.set ? 'Set editado' : 'Set creado';
 
 		obs.subscribe({
 			next: res => {
 				if (res.status) {
-					this._util.MostarAlerta(okMsg, 'Success');
+					this.utilidadService.MostarAlerta(okMsg, 'Success');
 					this.modal.close(true);
 				} else {
-					this._util.MostarAlerta(res.msg, 'Error');
+					this.utilidadService.MostarAlerta(res.msg, 'Error');
 					this.modal.close(false);
 				}
 			},
@@ -113,46 +97,45 @@ export class ModalSet implements OnInit {
 	isImporting = false;
 
 	public Importar() {
-		const codigoRaw: string = this.form.value.codigo ?? '';
-		const codigo = codigoRaw.trim().toUpperCase();
-
-		if (!codigo) {
-			this._util.MostarAlerta('Introduce un código para importar', 'Advertencia');
-			return;
-		}
-
-		// opcional: valida 2-5 letras/números
-		if (!/^[A-Z0-9]{2,5}$/.test(codigo)) {
-			this._util.MostarAlerta('Código inválido. Usa 2–5 letras/números (ej: ONS)', 'Advertencia');
-			return;
-		}
-
-		this.isImporting = true;
-
-		this._setsService.Importar(codigo).subscribe({
-			next: (mtgSet) => {
-				this.isImporting = false;
-
-				if (!mtgSet) {
-					this._util.MostarAlerta(`No se encontró ningún set con código ${codigo}`, 'Info');
-					return;
-				}
-
-				// Rellenamos el form (solo fecha dd/MM/yyyy)
-				this.form.patchValue({
-					nombre: mtgSet.nombre,
-					logo: mtgSet.logo,
-					fechaSalida: mtgSet.fechaSalida?.substring(0, 10) ?? ''
-				});
-
-				this._util.MostarAlerta(`Set ${codigo} importado correctamente`, 'Success');
-			},
-			error: (err) => {
-				console.error(err);
-				this.isImporting = false;
-				this._util.MostarAlerta('Error consultando la API de MTG', 'Error');
+		/* 	const codigoRaw: string = this.form.value.codigo ?? '';
+			const codigo = codigoRaw.trim().toUpperCase();
+	
+			if (!codigo) {
+				this.utilidadService.MostarAlerta('Introduce un código para importar', 'Advertencia');
+				return;
 			}
-		});
+	
+			// opcional: valida 2-5 letras/números
+			if (!/^[A-Z0-9]{2,5}$/.test(codigo)) {
+				this.utilidadService.MostarAlerta('Código inválido. Usa 2–5 letras/números (ej: ONS)', 'Advertencia');
+				return;
+			}
+	
+			this.isImporting = true;
+	
+			this.catalogoService.GetSet(codigo).subscribe({
+				next: (set: Set) => {
+					this.isImporting = false;
+	
+					if (!set) {
+						this.utilidadService.MostarAlerta(`No se encontró ningún set con código ${codigo}`, 'Info');
+						return;
+					}
+	
+					// Rellenamos el form (solo fecha dd/MM/yyyy)
+					this.form.patchValue({
+						nombre: set.nombre,
+						logo: set.logo,
+						fechaSalida: set.fechaSalida?.substring(0, 10) ?? ''
+					});
+	
+					this.utilidadService.MostarAlerta(`Set ${codigo} importado correctamente`, 'Success');
+				},
+				error: (err) => {
+					this.isImporting = false;
+					this.utilidadService.MostarAlerta('Error consultando la API de MTG', 'Error');
+				}
+			}); */
 	}
 
 }

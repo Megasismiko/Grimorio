@@ -3,7 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { FormBuilder, Validators, FormControl } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { CartasService } from '../../../../services/cartas.service';
-import { SHARED_IMPORTS } from '../../../../reutilizable/shared.imports';
+import { DEFAULT_CARD_IMAGE, SHARED_IMPORTS } from '../../../../reutilizable/shared.imports';
 import { Set } from '../../../../interfaces/set';
 import { SetsService } from '../../../../services/sets.service';
 import { CabeceraSetComponent } from '../../../reutilizable/cabecera-set/cabecera-set';
@@ -20,7 +20,8 @@ import { Carta } from '../../../../interfaces/carta';
 })
 export class CartaComponent implements OnInit {
 
-	DEFAULT_IMG = 'https://gatherer.wizards.com/assets/card_back.webp';
+	DEFAULT_CARD_IMG = DEFAULT_CARD_IMAGE
+
 	private route = inject(ActivatedRoute);
 	private router = inject(Router);
 	private fb = inject(FormBuilder);
@@ -47,7 +48,7 @@ export class CartaComponent implements OnInit {
 		numero: [''],
 		poder: [''],
 		resistencia: [''],
-		imagenUrl: [this.DEFAULT_IMG],
+		imagenUrl: [DEFAULT_CARD_IMAGE],
 		esActivo: [true],
 	});
 
@@ -140,7 +141,7 @@ export class CartaComponent implements OnInit {
 						numero: c.numero ?? '',
 						poder: c.poder ?? '',
 						resistencia: c.resistencia ?? '',
-						imagenUrl: c.imagenUrl ?? this.DEFAULT_IMG,
+						imagenUrl: c.imagenUrl ?? DEFAULT_CARD_IMAGE,
 						esActivo: c.esActivo ?? true,
 					});
 				} else {
@@ -178,7 +179,7 @@ export class CartaComponent implements OnInit {
 			numero: this.form.value.numero ?? '',
 			poder: this.form.value.poder ?? '',
 			resistencia: this.form.value.resistencia ?? '',
-			imagenUrl: this.form.value.imagenUrl ?? this.DEFAULT_IMG,
+			imagenUrl: this.form.value.imagenUrl ?? DEFAULT_CARD_IMAGE,
 			esActivo: this.form.value.esActivo ?? true,
 		};
 

@@ -9,6 +9,6 @@ namespace Grimorio.BLL.Servicios.Contrato
         Task<SetDTO> Crear(SetDTO dto);
         Task<bool> Editar(SetDTO dto);
         Task<bool> Eliminar(int id);
-     
+        Task<bool> CrearLote(List<SetDTO> sets);
     }
 }

@@ -1,0 +1,166 @@
+/* ===== Título ===== */
+.dlg-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0 0 4px 0;
+}
+
+/* ===== Contenido ===== */
+.dlg-content {
+  max-height: 70vh;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+/* ===== Filtro ===== */
+.filter-row {
+  display: flex;
+  gap: 8px;
+}
+.filter-field {
+  flex: 1;
+}
+
+/* ===== Loading ===== */
+.loading-row {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: center;
+  gap: 12px;
+}
+.loading-text {
+  opacity: 0.8;
+  font-size: 0.9rem;
+}
+
+/* ===== Tabla ===== */
+.table-container {
+  position: relative;
+  overflow: auto;
+  border-radius: 8px;
+  outline: 1px solid rgba(0, 0, 0, 0.08);
+  max-height: 52vh; /* controla altura visible de la tabla */
+}
+.table-container.disabled {
+  pointer-events: none;
+  opacity: 0.7;
+}
+
+table {
+  width: 100%;
+  border-spacing: 0;
+}
+
+/* Cabecera sticky */
+.sticky-header {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  background: var(--mat-table-header-headline-color, inherit);
+}
+
+/* Celdas */
+th[mat-header-cell],
+td[mat-cell] {
+  padding: 10px 14px;
+  vertical-align: middle;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+  white-space: nowrap;
+}
+td[mat-cell] {
+  white-space: normal; /* nombre largo puede hacer wrap */
+}
+
+/* Zebra */
+tr[mat-row]:nth-child(even) td[mat-cell] {
+  background-color: rgba(0, 0, 0, 0.02);
+}
+
+/* Hover fila */
+.selectable-row {
+  cursor: pointer;
+}
+.selectable-row:hover td[mat-cell] {
+  background-color: rgba(0, 0, 0, 0.06);
+}
+
+/* ===== Columnas: anchos y formato (coinciden con tus displayedColumns) ===== */
+.mat-column-select {
+  width: 56px;
+  min-width: 56px;
+  text-align: center;
+}
+.mat-column-logo {
+  width: 44px;
+  min-width: 44px;
+}
+.set-logo {
+  width: 24px;
+  height: 24px;
+  display: block;
+}
+
+.mat-column-codigo {
+  width: 120px;
+  min-width: 110px;
+}
+.mat-column-nombre {
+  min-width: 240px;
+}
+.mat-column-fechaSalida {
+  width: 140px;
+  min-width: 120px;
+}
+.mat-column-numCartas {
+  width: 110px;
+  min-width: 90px;
+  text-align: right;
+}
+
+/* Utilidades */
+.align-right {
+  text-align: right;
+}
+.capitalize {
+  text-transform: capitalize;
+}
+.mono {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono',
+    'Courier New', monospace;
+}
+.strong {
+  font-weight: 600;
+}
+
+/* ===== Paginador ===== */
+mat-paginator {
+  margin-top: 8px;
+}
+
+/* ===== Error ===== */
+.error-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--mat-form-field-error-text-color, #d32f2f);
+}
+
+/* ===== Acciones ===== */
+.dlg-actions {
+  gap: 8px;
+}
+
+/* ===== Responsive ===== */
+@media (max-width: 768px) {
+  .mat-column-fechaSalida {
+    display: none;
+  }
+  .dlg-content {
+    max-height: 65vh;
+  }
+  .table-container {
+    max-height: 48vh;
+  }
+}

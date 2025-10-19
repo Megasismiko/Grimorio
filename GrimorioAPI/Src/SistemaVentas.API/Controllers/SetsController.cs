@@ -53,6 +53,7 @@ namespace Grimorio.API.Controllers
 
             return Ok(res);
         }
+
         [HttpPost]
         [Route("crear")]
         public async Task<IActionResult> Crear([FromBody] SetDTO set)
@@ -62,6 +63,25 @@ namespace Grimorio.API.Controllers
             try
             {
                 res.value = await _setService.Crear(set);
+            }
+            catch (Exception ex)
+            {
+                res.status = false;
+                res.msg = ex.Message;
+            }
+
+            return Ok(res);
+        }
+
+        [HttpPost]
+        [Route("crear/lote")]
+        public async Task<IActionResult> CrearLote([FromBody] List<SetDTO> sets)
+        {
+            Response<bool> res = new();
+
+            try
+            {
+                res.value = await _setService.CrearLote(sets);
             }
             catch (Exception ex)
             {

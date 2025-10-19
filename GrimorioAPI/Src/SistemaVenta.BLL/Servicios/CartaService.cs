@@ -71,6 +71,93 @@ namespace Grimorio.BLL.Servicios
             return _mapper.Map<CartaDTO>(cartaCreada);
         }
 
+        public async Task<bool> CrearLote(List<CartaDTO> cartas)
+        {
+            if (cartas is null || cartas.Count == 0)
+                throw new ValidationException("Debes enviar al menos una carta.");
+
+            // 1) Normalizar y validar mínimos
+            var normalizadas = cartas
+                .Where(c => c is not null)
+                .Select(c => new
+                {
+                    Dto = c,
+                    IdSet = c.IdSet,
+                    Nombre = (c.Nombre ?? string.Empty).Trim(),
+                    NombreKey = (c.Nombre ?? string.Empty).Trim().ToUpperInvariant(),
+                    Rareza = c.Rareza?.Trim(),
+                    Tipo = c.Tipo?.Trim(),
+                    ImagenUrl = c.ImagenUrl?.Trim(),
+                    Stock = c.Stock
+                })
+                .ToList();
+
+            // 2) Verificar que todo el lote pertenece al MISMO set
+            var distinctSetIds = normalizadas.Select(x => x.IdSet).Where(id => id > 0).Distinct().ToList();
+            if (distinctSetIds.Count != 1)
+                throw new ValidationException("Todas las cartas del lote deben pertenecer al mismo Set.");
+            var setId = distinctSetIds[0];
+            if (setId <= 0)
+                throw new ValidationException("El Id del set es obligatorio y debe ser mayor que 0.");
+
+            // 3) Validaciones de cada carta
+            var errores = new List<string>();
+            foreach (var x in normalizadas)
+            {
+                if (x.IdSet != setId) errores.Add($"Carta con IdSet inconsistente (Nombre='{x.Nombre}').");
+                if (string.IsNullOrWhiteSpace(x.Nombre)) errores.Add("Carta sin Nombre.");
+                if (x.Stock is < 0) errores.Add($"Stock negativo en carta '{x.Nombre}'.");
+            }
+            if (errores.Count > 0)
+                throw new ValidationException(string.Join(" ", errores));
+
+            // 4) Confirmar existencia del Set (una sola consulta)
+            var set = await _setRepository.Obtener(s => s.IdSet == setId);
+            if (set is null)
+                throw new NotFoundException($"El Set {setId} no existe.");
+
+            // 5) De-dup en memoria por Nombre (case-insensitive) dentro del lote
+            var unicos = normalizadas
+                .GroupBy(x => x.NombreKey)
+                .Select(g => g.First())
+                .ToList();
+
+            // 6) Traer nombres existentes SOLO de ese Set (una consulta)
+            var existentes = await _cartaRepository.Consultar(c => c.IdSet == setId);
+            var nombresExistentes = existentes
+                .Select(c => (c.Nombre ?? string.Empty).Trim().ToUpperInvariant())
+                .ToHashSet();
+
+            // 7) Filtrar candidatas (no existentes en BD) y mapear entidades
+            var candidatas = unicos
+                .Where(x => !nombresExistentes.Contains(x.NombreKey))
+                .Select(x =>
+                {
+                    var dto = x.Dto;
+                    dto.IdSet = setId;         // asegurar setId unificado
+                    dto.Nombre = x.Nombre;     // normalizaciones aplicadas
+                    dto.Rareza = x.Rareza;
+                    dto.Tipo = x.Tipo;
+                    dto.ImagenUrl = x.ImagenUrl;
+                    return _mapper.Map<Carta>(dto);
+                })
+                .ToList();
+
+            if (candidatas.Count == 0)
+                return true; // nada que crear (idempotente)
+
+            // 8) Crear una a una con el repositorio
+            var creadas = 0;
+            foreach (var entity in candidatas)
+            {
+                var creada = await _cartaRepository.Crear(entity);
+                if (creada is not null && creada.IdCarta > 0)
+                    creadas++;
+            }
+
+            return creadas == candidatas.Count;
+        }
+
         public async Task<bool> Editar(CartaDTO dto)
         {
             if (dto is null) throw new ValidationException("Los datos de la carta son obligatorios.");
@@ -135,5 +222,7 @@ namespace Grimorio.BLL.Servicios
 
             return true;
         }
+
+        
     }
 }
